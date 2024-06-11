@@ -25,7 +25,7 @@ async function Dashboard({
 
   return (
     <div className="mx-auto w-[40rem] max-sm:w-full">
-      {/* <UserPosts username={session.user.username as string}/> */}
+      placeholder
     </div>
   );
 }
