@@ -36,5 +36,4 @@ yarn-error.log*
 next-env.d.ts
 
 .prettierrc
-# Sentry Config File
-.env.sentry-build-plugin
+
