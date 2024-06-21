@@ -44,7 +44,7 @@ function RegisterForm() {
         setIsLoading(false);
         return;
       }
-      const resExist = await fetch("api/userExist", {
+      const resExist = await fetch(`${process.env.NEXTAUTH_URL}/api/userExist`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +64,7 @@ function RegisterForm() {
         return;
       }
 
-      const res = await fetch("api/user", {
+      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

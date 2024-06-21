@@ -1,5 +1,5 @@
 {
-  "name": "next-prisma-ts",
+  "name": "smc",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -54,5 +54,12 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "",
+  "license": "ISC"
 }

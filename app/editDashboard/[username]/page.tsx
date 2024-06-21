@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 
 const getUser = async (username: string) => {
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL as string}/api/user/${username}`, {
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user/${username}`, {
       cache: "no-store",
     });
 

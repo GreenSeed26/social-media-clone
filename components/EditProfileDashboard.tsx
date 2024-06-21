@@ -63,7 +63,7 @@ function EditProfileDashboard({ user }: { user: TDisplayProfile }) {
         });
 
         try {
-          await fetch(`/api/user/${user.user.username}`, {
+          await fetch(`${process.env.NEXTAUTH_URL}/api/user/${user.user.username}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -73,7 +73,7 @@ function EditProfileDashboard({ user }: { user: TDisplayProfile }) {
             }),
           });
 
-          await fetch(`/api/posts/${user.user.username}`, {
+          await fetch(`${process.env.NEXTAUTH_URL}/api/posts/${user.user.username}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -92,7 +92,7 @@ function EditProfileDashboard({ user }: { user: TDisplayProfile }) {
         });
 
         try {
-          await fetch(`/api/user/${user.user.username}`, {
+          await fetch(`${process.env.NEXTAUTH_URL}/api/user/${user.user.username}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -105,7 +105,7 @@ function EditProfileDashboard({ user }: { user: TDisplayProfile }) {
           console.log(error);
         }
       }
-      const res = await fetch(`/api/user/${user.user.username}`, {
+      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user/${user.user.username}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

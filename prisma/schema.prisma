@@ -9,31 +9,6 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
-}
-
-model User {
-  id          String   @id @default(uuid())
-  username    String   @unique
-  email       String
-  password    String
-  image       String   
-  bannerImage String  
-  bio         String   
-  createdAt   DateTime @default(now())
-  post        Post[]
-
-  @@unique([email])
-}
-
-model Post {
-  id          String   @id @default(uuid())
-  postBody    String   @db.LongText
-  postImage   String?  @db.LongText
-  author      User     @relation(fields: [authorId], references: [username])
-  authorId    String
-  authorImage String   @default(dbgenerated()) @db.LongText
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
