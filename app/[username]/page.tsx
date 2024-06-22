@@ -1,20 +1,36 @@
 import DisplayProfile from "@/components/DisplayProfile";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import DashboardProfile from "@/components/DasboardProfile";
-import { UserInfo } from "../types";
-import { getUser } from "@/lib/helper";
+
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+export const generateMetadata = ({
+  params,
+}: {
+  params: {
+    username: string;
+  };
+}): Metadata => {return {
+  title: `${params.username}`
+}};
+
 
 async function ProfilePage({ params }: { params: { username: string } }) {
   const session = await getServerSession(authOptions);
   const username = params.username;
-  const user: UserInfo = await getUser(username);
   const currentSession = session?.user.username;
 
-  if (currentSession == user.user.username) {
-    redirect(`/profile/${currentSession}`);
+  if (!session) {
+    redirect("/login");
+  } else if (currentSession === username) {
+    redirect(`/profile/${username}`);
   }
+
+  const res = await fetch(`${process.env.API_URL}/api/user/${username}`, {
+    cache: "no-store",
+  });
+
+  const user = await res.json();
 
   return (
     <div className="mx-auto w-[40rem] min-w-0 max-sm:w-full">

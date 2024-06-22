@@ -8,31 +8,10 @@ import { convertToLocaleString } from "@/lib/convertDate";
 import EditProfile from "./EditProfile";
 import Modal from "./Modal";
 import { useState } from "react";
+import { UserProps } from "@/app/types";
 
 
-function DashboardProfile({
-  user,
-}: {
-  user: {
-    id: string;
-    username: string;
-    email: string;
-    password: string;
-    image: string;
-    bannerImage: string;
-    bio: string;
-    createdAt: Date;
-    posts: {
-      id: string;
-      postBody: string;
-      postImage: string | null;
-      authorImage: string;
-      authorId: string;
-      createdAt: string;
-      updatedAt: string;
-    }[];
-  };
-}) {
+function DashboardProfile({user} : {user: UserProps} ) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpenModal = () => setIsOpen(true);

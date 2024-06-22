@@ -12,26 +12,28 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
   id          String   @id @default(uuid())
   username    String   @unique
   email       String
   password    String
-  image       String   
-  bannerImage String  
-  bio         String   
+  image       String   @default("")
+  bannerImage String   @default("")
+  bio         String   @default("")
   createdAt   DateTime @default(now())
   post        Post[]
+
   @@unique([email])
 }
 
 model Post {
   id          String   @id @default(uuid())
   postBody    String   @default("")
-  postImage   String  @default("")
+  postImage   String   @default("")
   author      User     @relation(fields: [authorId], references: [username])
   authorId    String
-  authorImage String   @default("") 
+  authorImage String   @default("")
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt 
+  updatedAt   DateTime @updatedAt
 }

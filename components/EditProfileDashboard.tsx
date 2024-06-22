@@ -1,28 +1,29 @@
 "use client";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-
-import { TDisplayProfile } from "@/app/types";
 import Image from "next/image";
 import profileIcon from "../public/kisspng-user-profile-computer-icons-avatar-clip-art-profile-cliparts-free-5ab58cd1058c25.3471458915218475050227.png";
 import banner from "../public/banner.jpg";
 import { Loader2 } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useEdgeStore } from "@/lib/edgestore";
 import ChangeProfilePic from "./ChangeProfilePic";
 import ChangeBannerPic from "./ChangeBannerPic";
+import { UserProps } from "@/app/types";
+import { useSession } from "next-auth/react";
 
-function EditProfileDashboard({ user }: { user: TDisplayProfile }) {
-  const [username, setUsername] = useState<string>(user.user.username);
-  const [email, setEmail] = useState<string>(user.user.email);
-  const [image, setImage] = useState<File>();
-  const [bannerImage, setBannerImage] = useState<File>();
-  const [bio, setBio] = useState<string>(user.user.bio);
-  const [bioLen, setBioLen] = useState(bio.length);
+function EditProfileDashboard({ userData }: { userData: UserProps }) {
+  const [newUsername, setNewUsername] = useState<string>(userData.username);
+  const [newEmail, setNewEmail] = useState<string>(userData.email);
+  const [newImage, setNewImage] = useState<File>();
+  const [newBannerImage, setNewBannerImage] = useState<File>();
+  const [newBio, setNewBio] = useState<string>(userData.bio);
+  const [bioLen, setBioLen] = useState<number>(userData.bio.length);
   const [isLoading, setIsLoading] = useState(false);
-  const [imgUrl, setImgUrl] = useState<string>(user.user.image);
-  const [bannerUrl, setBannerUrl] = useState<string>(user.user.bannerImage);
+  const [imgUrl, setImgUrl] = useState<string>(userData.image);
+  const [bannerUrl, setBannerUrl] = useState<string>(userData.bannerImage);
+
+  const { data: session, update } = useSession();
 
   const { toast } = useToast();
   const { edgestore } = useEdgeStore();
@@ -31,21 +32,21 @@ function EditProfileDashboard({ user }: { user: TDisplayProfile }) {
 
   const handleTextLength = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const txt = e.target.value;
-    setBio(txt);
+    setNewBio(txt);
     setBioLen(txt.length);
   };
   const getCroppedImg = (data: File) => {
-    setImage(data);
+    setNewImage(data);
     setImgUrl(URL.createObjectURL(data));
   };
   const getCroppedBanner = (data: File) => {
-    setBannerImage(data);
+    setNewBannerImage(data);
     setBannerUrl(URL.createObjectURL(data));
   };
   const handleSumbit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!username || !email) {
+    if (!newUsername || !newEmail) {
       toast({
         title: "Empty Fields !",
         description: "All fields cannot be empty",
@@ -57,70 +58,89 @@ function EditProfileDashboard({ user }: { user: TDisplayProfile }) {
     try {
       setIsLoading(true);
 
-      if (image) {
+      if (newImage) {
         const res = await edgestore.myPublicImages.upload({
-          file: image,
+          file: newImage,
         });
 
         try {
-          await fetch(`${process.env.NEXTAUTH_URL}/api/user/${user.user.username}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              image: res.url,
-            }),
-          });
+          await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/user/${userData.username}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                image: res.url,
+              }),
+            }
+          );
 
-          await fetch(`${process.env.NEXTAUTH_URL}/api/posts/${user.user.username}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              authorImage: res.url,
-            }),
-          });
+          await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${userData.username}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                authorImage: res.url,
+              }),
+            }
+          );
         } catch (error) {
           console.log(error);
         }
       }
-      if (bannerImage) {
+      if (newBannerImage) {
         const res = await edgestore.myPublicImages.upload({
-          file: bannerImage,
+          file: newBannerImage,
         });
 
         try {
-          await fetch(`${process.env.NEXTAUTH_URL}/api/user/${user.user.username}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              bannerImage: res.url,
-            }),
-          });
+          await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/user/${userData.username}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                bannerImage: res.url,
+              }),
+            }
+          );
         } catch (error) {
           console.log(error);
         }
       }
-      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user/${user.user.username}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          username,
-          bio,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/${userData.username}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: newEmail,
+            username: newUsername,
+            bio: newBio,
+          }),
+        }
+      );
 
       if (!res.ok) {
         return;
       } else {
-        router.push(`/profile/${user.user.username}`);
+        await update({
+          ...session,
+          user: {
+            ...session?.user,
+            username: newUsername
+          }
+        })
+        router.push(`/profile/${newUsername}`);
         router.refresh();
         setIsLoading(false);
         toast({
@@ -173,16 +193,16 @@ function EditProfileDashboard({ user }: { user: TDisplayProfile }) {
           <label className="text-sm font-semibold">Username</label>
           <input
             className="h-8 rounded border px-2 py-4 text-sm font-semibold outline-none"
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
+            onChange={(e) => setNewUsername(e.target.value)}
+            value={newUsername}
             type="text"
           />
 
           <label className="text-sm font-semibold">Email</label>
           <input
             className="h-8 rounded border px-2 py-4 text-sm font-semibold outline-none"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            onChange={(e) => setNewEmail(e.target.value)}
+            value={newEmail}
             type="text"
           />
 
@@ -191,7 +211,7 @@ function EditProfileDashboard({ user }: { user: TDisplayProfile }) {
             <span className="text-xs">{bioLen}/101</span>
           </div>
           <textarea
-            value={bio}
+            value={newBio}
             maxLength={101}
             onChange={handleTextLength}
             className="h-28 resize-none rounded-lg border p-2 text-sm font-semibold outline-none"

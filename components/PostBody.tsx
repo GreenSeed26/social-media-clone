@@ -35,7 +35,7 @@ function PostBody() {
     const fetchPost = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/posts`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`);
         if (!res.ok) {
           throw new Error("Failed to fetch posts");
         }

@@ -12,13 +12,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import defaultIcon from "@/public/kisspng-user-profile-computer-icons-avatar-clip-art-profile-cliparts-free-5ab58cd1058c25.3471458915218475050227.png";
+import { UserInfo } from "@/app/types";
 
-type UserInfo = {
-  pfp: string;
-  username: string;
-};
-
-function ProfileIcon({ pfp, username }: UserInfo) {
+function ProfileIcon({ user }: UserInfo) {
   const [drop, setDrop] = useState(false);
 
   return (
@@ -33,11 +29,11 @@ function ProfileIcon({ pfp, username }: UserInfo) {
           className={` ${!drop ? "h-0 opacity-0" : "h-28 py-2 "} absolute flex w-32 -translate-x-[92px] translate-y-12 items-center overflow-hidden rounded-md bg-white px-2  shadow-lg transition-all duration-300`}
         >
           <div className="flex w-full flex-col items-center">
-            <span className="text-xs">{username}</span>
+            <span className="text-xs">@{user.username}</span>
             <Separator className="my-0.5 h-[1px] w-full bg-gray-200" />
             <div className="flex w-full cursor-pointer flex-col justify-start text-xs leading-6">
               <Link
-                href={`/profile/${username}`}
+                href={`/profile/${user.username}`}
                 className="flex items-center rounded px-1 hover:bg-gray-100"
               >
                 <UserIcon size={14} />
@@ -64,7 +60,7 @@ function ProfileIcon({ pfp, username }: UserInfo) {
         </div>
         <div className="relative">
           <Image
-            src={pfp ? pfp : defaultIcon}
+            src={user.image ? user.image : defaultIcon}
             alt=""
             height={80}
             width={80}

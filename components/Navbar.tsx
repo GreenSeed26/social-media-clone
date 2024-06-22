@@ -2,22 +2,14 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import ProfileIcon from "./ProfileIcon";
-import prisma from "@/lib/db";
+import { UserInfo } from "@/app/types";
 
 async function Navbar() {
   const session = await getServerSession(authOptions);
-  const currUser = session?.user.email + "";
+  const currUser = session?.user.username;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: currUser,
-    },
-    select: {
-      image: true,
-    },
-  });
-
-  const pfp = user?.image as string;
+  const res = await fetch(`${process.env.API_URL}/api/user/${currUser}`)
+  const userData: UserInfo = await res.json()
 
   return (
     <header className="sticky top-0 z-10 w-full border-b border-s-zinc-200 bg-zinc-100 py-1">
@@ -25,7 +17,7 @@ async function Navbar() {
         <Link href={"/"}>Home</Link>
 
         {session?.user ? (
-          <ProfileIcon pfp={pfp} username={session.user.username as string} />
+          <ProfileIcon user={userData.user} />
         ) : (
           <Link
             className="rounded bg-black p-1 text-sm text-white"

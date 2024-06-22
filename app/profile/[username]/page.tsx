@@ -1,10 +1,20 @@
 import { UserInfo } from "@/app/types";
 import DashboardProfile from "@/components/DasboardProfile";
 import { authOptions } from "@/lib/auth";
-import { getUser } from "@/lib/helper";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import React from "react";
+
+export const generateMetadata = ({
+  params,
+}: {
+  params: {
+    username: string;
+  };
+}): Metadata => {return {
+  title: `${params.username}`
+}};
 
 async function Dashboard({
   params,
@@ -16,16 +26,16 @@ async function Dashboard({
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect("/login");
-  } else if (params.username != session.user.username) {
-    //route user back to previous page or prevent user from routing to this page
-    redirect(`/profile/${session.user.username}`);
   }
-  const username = params.username;
-  const user: UserInfo = await getUser(username);
+  const { username } = params;
+  const res = await fetch(`${process.env.API_URL}/api/user/${username}`, {
+    cache: "no-store",
+  });
+  const user: UserInfo = await res.json();
 
   return (
     <div className="mx-auto w-[40rem] max-sm:w-full">
-      placeholder
+      <DashboardProfile user={user.user} />
     </div>
   );
 }

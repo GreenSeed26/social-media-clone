@@ -3,10 +3,9 @@ import { NextResponse } from "next/server";
 
 export async function PUT(
   req: Request,
-  { params }: { params: { username: string } },
+  { params }: { params: { username: string } }
 ) {
-  const { username, email, image, bannerImage, bio, authorImage } =
-    await req.json();
+  const { username, email, image, bannerImage, bio } = await req.json();
   const userName = params.username;
 
   try {
@@ -28,7 +27,7 @@ export async function PUT(
 }
 export async function GET(
   req: Request,
-  { params }: { params: { username: string } },
+  { params }: { params: { username: string } }
 ) {
   try {
     const id = params.username;
@@ -45,7 +44,7 @@ export async function GET(
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to fetch data" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

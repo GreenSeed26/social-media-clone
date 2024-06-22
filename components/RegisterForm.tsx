@@ -7,6 +7,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 
 const usedEmail = "sample@email.com";
 
+
 function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -44,7 +45,7 @@ function RegisterForm() {
         setIsLoading(false);
         return;
       }
-      const resExist = await fetch(`${process.env.NEXTAUTH_URL}/api/userExist`, {
+      const resExist = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/userExist`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +65,7 @@ function RegisterForm() {
         return;
       }
 
-      const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +79,7 @@ function RegisterForm() {
         toast({
           title: "Success",
           description: "Account successfully created",
-          variant: 'default',
+          variant: "default",
         });
       } else {
         toast({

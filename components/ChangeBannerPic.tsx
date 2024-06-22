@@ -71,7 +71,7 @@ function ChangeBannerPic({
       },
       ASPECT_RATIO,
       width,
-      height,
+      height
     );
     const centeredCrop = centerCrop(crop, width, height);
     setCrop(centeredCrop);
@@ -85,7 +85,7 @@ function ChangeBannerPic({
     setCanvasPreview(
       imgRef.current,
       prevCanvasRef.current,
-      convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height),
+      convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height)
     );
     const dataUrl = prevCanvasRef.current.toBlob((blob) => {
       const file = new File([blob as Blob], "image", { type: blob?.type });
@@ -105,20 +105,20 @@ function ChangeBannerPic({
           className="flex cursor-pointer items-center rounded bg-gray-300/50 px-2 py-1 text-sm backdrop-blur-sm transition-colors hover:bg-gray-300/70"
         >
           <ImageIcon size={15} />
-          <span className="ml-1 hidden text-xs phones:block">
+          <span className="phones:block ml-1 hidden text-xs">
             Change Banner
           </span>
         </label>
       </DialogTrigger>
-      <DialogContent>
-        <DialogTitle>Change Banner</DialogTitle>
+      <DialogContent className="flex flex-col gap-0">
+        <DialogTitle className="py-1 text-base">Change Banner</DialogTitle>
         <label
           htmlFor="pfp"
-          className=" w-fit rounded bg-primary p-1 text-sm text-white"
+          className=" my-1 w-fit rounded bg-primary p-1 text-sm text-white"
         >
-          Select Profile Picture
+          Select an image
         </label>
-        <section className="flex flex-col gap-4">
+        <section className="flex gap-4">
           <input
             onChange={selectedImage}
             type="file"
@@ -146,22 +146,12 @@ function ChangeBannerPic({
                 />
               </ReactCrop>
 
-              <div className="flex items-center justify-between">
-                <button
-                  className="mt-3 h-8 w-fit rounded bg-primary px-1 text-sm text-white"
-                  onClick={handleCropImage}
-                >
-                  Crop Image
-                </button>
-                <button
-                  className="mt-3 h-8 w-fit rounded bg-primary px-1 text-sm text-white"
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                >
-                  Close
-                </button>
-              </div>
+              <button
+                className="mt-3 h-8 w-fit rounded bg-primary px-1 text-sm text-white"
+                onClick={handleCropImage}
+              >
+                Crop Image
+              </button>
             </div>
           )}
 
@@ -173,12 +163,20 @@ function ChangeBannerPic({
                 display: "none",
                 border: "1px solid black",
                 objectFit: "contain",
-                width: 500,
-                height: 1500,
+                width: 150,
+                height: 150,
               }}
             ></canvas>
           )}
         </section>
+        <button
+          className="w-fit place-self-end rounded bg-primary p-1 text-sm text-white"
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
+          Close
+        </button>
       </DialogContent>
     </Dialog>
   );

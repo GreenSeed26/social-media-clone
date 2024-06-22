@@ -17,8 +17,6 @@ function DisplayProfile({ user }: { user: UserInfo }) {
 
   const { data: session, status } = useSession();
 
-  console.log({ session, status });
-
   if (!session) {
     redirect("/login");
   }

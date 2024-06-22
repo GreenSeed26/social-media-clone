@@ -7,8 +7,6 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const id = session?.user.username as string;
 
-  console.log(session?.user.username);
-
   const { postBody, postImage } = await req.json();
 
   const user = await prisma.user.findFirst({

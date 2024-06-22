@@ -5,7 +5,7 @@ import { hash } from "bcrypt";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { username, email, password, image, bannerImage, bio } = body;
+    const { username, email, password } = body;
 
     const hashpass = await hash(password, 10);
 
@@ -13,10 +13,7 @@ export async function POST(req: Request) {
       data: {
         username,
         email,
-        password: hashpass,
-        image: '',
-        bannerImage: '',
-        bio: ''
+        password: hashpass
       },
     });
 

@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
 
         const passwordMatch = await compare(
           credentials.password,
-          existingUser.password,
+          existingUser.password
         );
 
         if (!passwordMatch) {
@@ -50,7 +50,7 @@ export const authOptions: NextAuthOptions = {
           id: existingUser.id,
           username: existingUser.username,
           email: existingUser.email,
-          image: existingUser.image
+          image: existingUser.image,
         };
       },
     }),
@@ -62,13 +62,20 @@ export const authOptions: NextAuthOptions = {
     // async redirect({ url, baseUrl }) {
     //   return baseUrl;
     // },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         return {
           ...token,
           username: user.username,
           email: user.email, // Include the user's email
-          picture: user.image
+          picture: user.image,
+        };
+      }
+
+      if (trigger === "update") {
+        return {
+          ...token,
+          ...session.user,
         };
       }
       return token;
