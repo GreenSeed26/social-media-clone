@@ -37,6 +37,9 @@ function PostBodyND() {
           <span className="ml-1 text-sm font-semibold">Share</span>
         </div>
       </div>
+      <div>
+        Hello
+      </div>
     </div>
   );
 }
