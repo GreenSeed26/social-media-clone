@@ -9,7 +9,7 @@ export async function GET(
     params: {
       username: string;
     };
-  },
+  }
 ) {
   const username = params.username;
 
@@ -27,7 +27,7 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { username: string } },
+  { params }: { params: { username: string } }
 ) {
   const { authorImage } = await req.json();
   const username = params.username;

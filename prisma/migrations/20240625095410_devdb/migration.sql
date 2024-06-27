@@ -4,9 +4,9 @@ CREATE TABLE "User" (
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "image" TEXT NOT NULL,
-    "bannerImage" TEXT NOT NULL,
-    "bio" TEXT NOT NULL,
+    "image" TEXT NOT NULL DEFAULT '',
+    "bannerImage" TEXT NOT NULL DEFAULT '',
+    "bio" TEXT NOT NULL DEFAULT '',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -18,6 +18,7 @@ CREATE TABLE "Post" (
     "postBody" TEXT NOT NULL DEFAULT '',
     "postImage" TEXT NOT NULL DEFAULT '',
     "authorId" TEXT NOT NULL,
+    "postLike" INTEGER[] DEFAULT ARRAY[]::INTEGER[],
     "authorImage" TEXT NOT NULL DEFAULT '',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

@@ -61,6 +61,9 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
       if (newImage) {
         const res = await edgestore.myPublicImages.upload({
           file: newImage,
+          options: {
+            replaceTargetUrl: !userData.image ? "" : userData.image
+          }
         });
 
         try {
@@ -95,7 +98,9 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
       }
       if (newBannerImage) {
         const res = await edgestore.myPublicImages.upload({
-          file: newBannerImage,
+          file: newBannerImage, options: {
+            replaceTargetUrl : !userData.bannerImage ? "" : userData.bannerImage
+          }
         });
 
         try {

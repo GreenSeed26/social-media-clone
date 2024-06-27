@@ -7,7 +7,6 @@ import { ChangeEvent, FormEvent, useState } from "react";
 
 const usedEmail = "sample@email.com";
 
-
 function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -45,13 +44,16 @@ function RegisterForm() {
         setIsLoading(false);
         return;
       }
-      const resExist = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/userExist`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
+      const resExist = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/userExist`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
 
       const { user } = await resExist.json();
 

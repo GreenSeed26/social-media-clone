@@ -9,7 +9,7 @@ export async function GET(
     params: {
       id: string;
     };
-  },
+  }
 ) {
   const id = params.id;
 
@@ -27,16 +27,17 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string } }
 ) {
   const id = params.id;
-  const { postBody } = await req.json();
+  const { postBody, postLike } = await req.json();
 
   try {
     const post = await prisma.post.update({
       where: { id },
       data: {
         postBody,
+        postLike,
       },
     });
     return NextResponse.json({ post });

@@ -27,6 +27,7 @@ export type UserProps = {
     authorId: string;
     createdAt: string;
     updatedAt: string;
+    
   }[];
 }
 
