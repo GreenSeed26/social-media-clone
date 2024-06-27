@@ -17,7 +17,6 @@ model User {
   bio         String   @default("")
   createdAt   DateTime @default(now())
   post        Post[]
-  Like        Like[]
 }
 
 model Post {
@@ -25,18 +24,8 @@ model Post {
   postBody    String   @default("")
   postImage   String   @default("")
   authorId    String
-  likes       Like[]
   authorImage String   @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   author      User     @relation(fields: [authorId], references: [username])
-}
-
-model Like {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-  post      Post?    @relation(fields: [postId], references: [id])
-  postId    String?
-  userId    String
 }
