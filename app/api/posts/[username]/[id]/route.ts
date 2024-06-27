@@ -37,7 +37,6 @@ export async function PUT(
       where: { id },
       data: {
         postBody,
-        postLike,
       },
     });
     return NextResponse.json({ post });
