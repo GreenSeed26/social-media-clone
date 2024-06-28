@@ -25,12 +25,21 @@ type SessionProp = {
 
 const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const vidRef = useRef(null);
   const [post, setPost] = useState("");
   const [textLength, setTextLength] = useState(false);
   const [imgPrev, setImgPrev] = useState<string>("");
+  const [vidPrev, setVidPrev] = useState<string>("");
   const [imgFile, setImgFile] = useState<File>();
+  const [vidFile, setVidFile] = useState<File>();
   const [loading, setLoading] = useState(false);
   const { edgestore } = useEdgeStore();
+  const [className, setClassName] = useState<string>("object-cover");
+
+  const getVideo = (data: string, file?: File) => {
+    setVidPrev(data);
+    setVidFile(file);
+  };
 
   const getImage = (data: string, file?: File) => {
     setImgFile(file);
@@ -57,7 +66,7 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!post && !imgFile) {
+    if (!post && !imgFile && !vidFile) {
       return alert("Empty Fields");
     }
 
@@ -65,10 +74,16 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
 
     try {
       let postImage = "";
+      let postVideo = "";
 
       if (imgFile) {
         const res = await edgestore.myPublicImages.upload({ file: imgFile });
         postImage = res.url;
+      }
+
+      if (vidFile) {
+        const res = await edgestore.myPublicFiles.upload({ file: vidFile });
+        postVideo = res.url;
       }
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
@@ -76,7 +91,7 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ postBody: post, postImage }),
+        body: JSON.stringify({ postBody: post, postImage, postVideo }),
       });
 
       if (res.ok) {
@@ -126,6 +141,23 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
               placeholder={`What's on your mind, ${userName}?`}
               ref={textAreaRef}
             ></textarea>
+
+            {vidPrev && (
+              <video
+                className={`h-96 w-full ${className}`}
+                ref={vidRef}
+                height={675}
+                width={1200}
+                controls
+                muted
+                onPlay={() => {
+                  setClassName("object-contain");
+                }}
+              >
+                <source src={vidPrev} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
             {imgPrev && (
               <div className="relative w-full h-80">
                 <Image
@@ -140,7 +172,7 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
 
           <div className="m-2 flex justify-between">
             <ImageInput getImage={getImage} />
-            <VideoInput />
+            <VideoInput getVideo={getVideo} />
           </div>
           <button
             disabled={loading}

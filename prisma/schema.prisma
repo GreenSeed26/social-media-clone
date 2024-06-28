@@ -23,6 +23,7 @@ model Post {
   id          String   @id @default(uuid())
   postBody    String   @default("")
   postImage   String   @default("")
+  postVideo   String   @default("")
   authorId    String
   authorImage String   @default("")
   createdAt   DateTime @default(now())

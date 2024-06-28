@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   const id = session?.user.username as string;
 
-  const { postBody, postImage } = await req.json();
+  const { postBody, postImage, postVideo } = await req.json();
 
   const user = await prisma.user.findFirst({
     where: { username: id },
@@ -24,13 +24,14 @@ export async function POST(req: Request) {
         authorImage: user?.image as string,
         postBody,
         postImage,
+        postVideo,
       },
     });
     return NextResponse.json(post);
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to create post" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

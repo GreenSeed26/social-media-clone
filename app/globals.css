@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @layer utilities {
+  .containerw:hover .controls {
+    opacity: 1;
+  }
+} */
+
 @layer base {
   :root {
     --background: 0 0% 100%;

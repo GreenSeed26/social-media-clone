@@ -26,7 +26,7 @@ function DashboardProfile({user} : {user: UserProps} ) {
               className="w-full object-cover object-top"
               src={user.bannerImage || banner}
               fill
-              sizes="(min-width: 680px) 638px, calc(94.44vw + 15px)"
+              sizes="(min-width: 680px) 50vw"
               alt="banner"
               loading="lazy"
             />

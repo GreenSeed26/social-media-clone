@@ -2,14 +2,33 @@
 import { ImageIcon, VideoIcon } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 
-export function VideoInput() {
+export function VideoInput({
+  getVideo,
+}: {
+  getVideo: (data: string, file?: File) => void;
+}) {
+  const handleVideo = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    console.log(file);
+
+    if (file && file.type.startsWith("video/")) {
+      const vidUrl = URL.createObjectURL(file);
+      console.log(vidUrl);
+      getVideo(vidUrl, file);
+    }
+  };
   return (
     <>
-      <input type="file" accept="video/*" id="video" hidden disabled />
+      <input
+        type="file"
+        accept="video/*"
+        id="video"
+        hidden
+        onChange={handleVideo}
+      />
       <label
         htmlFor="video"
         className="mx-1 flex w-full items-center justify-center gap-1 rounded p-1 hover:bg-gray-200"
-        onClick={() => alert("this feature is currently in the works")}
       >
         <VideoIcon size={20} className=" text-rose-500" />
         <span className="text-sm ">Video</span>
