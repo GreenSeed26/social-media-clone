@@ -22,7 +22,7 @@ export type UserProps = {
   posts: {
     id: string;
     postBody: string;
-    postImage: string | null;
+    postImage: string[];
     authorImage: string;
     authorId: string;
     createdAt: string;
@@ -43,7 +43,7 @@ export type UserInfo = {
     posts: {
       id: string;
       postBody: string;
-      postImage: string | null;
+      postImage: string[];
       authorImage: string;
       authorId: string;
       createdAt: string;
@@ -55,7 +55,7 @@ export type UserInfo = {
 export type Posts = {
   id: string;
   postBody: string;
-  postImage: string;
+  postImage: string[];
   authorImage: string;
   authorId: string;
   createdAt?: string;

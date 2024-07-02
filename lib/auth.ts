@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
 
         const passwordMatch = await compare(
           credentials.password,
-          existingUser.password
+          existingUser.password,
         );
 
         if (!passwordMatch) {
@@ -66,6 +66,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         return {
           ...token,
+          id: user.id,
           username: user.username,
           email: user.email, // Include the user's email
           picture: user.image,
@@ -86,6 +87,7 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
+          id: token.id,
           username: token.username,
           email: token.email, // Include the user's email
           image: token.picture, // Include the user's profileImage

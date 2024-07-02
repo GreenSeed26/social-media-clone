@@ -16,6 +16,7 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { ImageInput, VideoInput } from "./VideoAndImage";
+import { useSession } from "next-auth/react";
 
 type SessionProp = {
   userName?: string;
@@ -28,9 +29,9 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
   const vidRef = useRef(null);
   const [post, setPost] = useState("");
   const [textLength, setTextLength] = useState(false);
-  const [imgPrev, setImgPrev] = useState<string>("");
+  const [imgPrev, setImgPrev] = useState<string[]>([]);
   const [vidPrev, setVidPrev] = useState<string>("");
-  const [imgFile, setImgFile] = useState<File>();
+  const [imgFile, setImgFile] = useState<File[]>([]);
   const [vidFile, setVidFile] = useState<File>();
   const [loading, setLoading] = useState(false);
   const { edgestore } = useEdgeStore();
@@ -41,7 +42,7 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
     setVidFile(file);
   };
 
-  const getImage = (data: string, file?: File) => {
+  const getImage = (data: string[], file: File[]) => {
     setImgFile(file);
     setImgPrev(data);
   };
@@ -63,6 +64,10 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
     }
   }, [post]);
 
+  const handleDelete = (index: number) => {
+    setImgPrev((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -73,12 +78,16 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
     setLoading(true);
 
     try {
-      let postImage = "";
+      let postImage: string[] = [];
       let postVideo = "";
 
-      if (imgFile) {
-        const res = await edgestore.myPublicImages.upload({ file: imgFile });
-        postImage = res.url;
+      for (let i = 0; i < imgFile?.length; i++) {
+        if (imgFile?.[i]) {
+          const res = await edgestore.myPublicFiles.upload({
+            file: imgFile[i],
+          });
+          postImage.push(res.url);
+        }
       }
 
       if (vidFile) {
@@ -122,7 +131,7 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
           What&apos;s on your mind?
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[500px] max-phones:w-96">
+      <DialogContent className="fixed w-[500px] max-phones:w-96">
         <X
           size={20}
           className="absolute right-0 -translate-x-4 translate-y-4 focus:outline"
@@ -132,16 +141,16 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
           <DialogTitle>Create Post</DialogTitle>
           <DialogDescription>{userName}</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="w-full">
-          <div className="textarea-scroll w-full h-auto overflow-y-auto">
+
+        <form onSubmit={handleSubmit} className="flex flex-col">
+          <div className="textarea-scroll h-auto w-full">
             <textarea
               value={post}
               onChange={handleText}
-              className="h-auto w-full resize-none text-sm whitespace-pre-wrap outline-none"
+              className="h-auto w-full resize-none whitespace-pre-wrap text-sm outline-none"
               placeholder={`What's on your mind, ${userName}?`}
               ref={textAreaRef}
             ></textarea>
-
             {vidPrev && (
               <video
                 className={`h-96 w-full ${className}`}
@@ -158,14 +167,25 @@ const CreatePost = ({ userName, open, setOpen }: SessionProp) => {
                 Your browser does not support the video tag.
               </video>
             )}
-            {imgPrev && (
-              <div className="relative w-full h-80">
-                <Image
-                  src={imgPrev}
-                  alt="imgPostPrev"
-                  height={1500}
-                  width={1500}
-                />
+            {imgPrev.length > 0 && (
+              <div className="flex h-auto max-h-80 flex-wrap items-stretch justify-center gap-1">
+                {imgPrev.map((img, index) => (
+                  <div key={index} className="relative size-24">
+                    <Image
+                      src={img}
+                      alt="imgPostPrev"
+                      height={1500}
+                      width={1500}
+                      className="size-24 rounded-xl border-white object-cover shadow-xl ring-1"
+                    />
+                    <span
+                      onClick={() => handleDelete(index)}
+                      className="absolute -right-1 -top-1 rounded-full bg-white p-1 ring-1 ring-black"
+                    >
+                      <X size={10} />
+                    </span>
+                  </div>
+                ))}
               </div>
             )}
           </div>

@@ -40,12 +40,15 @@ export function VideoInput({
 export function ImageInput({
   getImage,
 }: {
-  getImage: (data: string, file?: File) => void;
+  getImage: (data: string[], file: File[]) => void;
 }) {
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    const url = URL.createObjectURL(file as Blob);
-    getImage(url, file);
+    const files = e.target.files;
+    if (files) {
+      const imageFile = Array.from(files);
+      const imgPrev = imageFile.map((file) => URL.createObjectURL(file));
+      getImage(imgPrev, imageFile);
+    }
   };
 
   return (
@@ -55,6 +58,7 @@ export function ImageInput({
         accept="image/*"
         id="images"
         hidden
+        multiple
         onChange={handleImage}
       />
       <label

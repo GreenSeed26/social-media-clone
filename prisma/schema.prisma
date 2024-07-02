@@ -12,21 +12,32 @@ model User {
   username    String   @unique
   email       String   @unique
   password    String
-  image       String   @default("")
+  image       String?
   bannerImage String   @default("")
   bio         String   @default("")
-  createdAt   DateTime @default(now())
   post        Post[]
+  likes       Likes[]
+  createdAt   DateTime @default(now())
 }
 
 model Post {
   id          String   @id @default(uuid())
   postBody    String   @default("")
-  postImage   String   @default("")
-  postVideo   String   @default("")
+  postImage   String[]
+  postVideo   String?
+  author      User     @relation(fields: [authorId], references: [username])
   authorId    String
   authorImage String   @default("")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  author      User     @relation(fields: [authorId], references: [username])
+  likes       Likes[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Likes {
+  id     String  @id @default(uuid())
+  post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
+  user   User    @relation(fields: [userId], references: [id])
+  userId String
 }

@@ -9,19 +9,12 @@ export async function POST(req: Request) {
 
   const { postBody, postImage, postVideo } = await req.json();
 
-  const user = await prisma.user.findFirst({
-    where: { username: id },
-    select: {
-      username: true,
-      image: true,
-    },
-  });
-
   try {
     const post = await prisma.post.create({
       data: {
-        authorId: user?.username as string,
-        authorImage: user?.image as string,
+        author: {
+          connect: { username: id },
+        },
         postBody,
         postImage,
         postVideo,
@@ -29,10 +22,7 @@ export async function POST(req: Request) {
     });
     return NextResponse.json(post);
   } catch (error) {
-    return NextResponse.json(
-      { message: "Failed to create post" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error }, { status: 500 });
   }
 }
 
