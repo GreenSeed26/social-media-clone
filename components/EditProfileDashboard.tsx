@@ -9,19 +9,23 @@ import { useRouter } from "next/navigation";
 import { useEdgeStore } from "@/lib/edgestore";
 import ChangeProfilePic from "./ChangeProfilePic";
 import ChangeBannerPic from "./ChangeBannerPic";
-import { UserProps } from "@/app/types";
 import { useSession } from "next-auth/react";
+import { User } from "@prisma/client";
 
-function EditProfileDashboard({ userData }: { userData: UserProps }) {
+function EditProfileDashboard({ userData }: { userData: User }) {
   const [newUsername, setNewUsername] = useState<string>(userData.username);
   const [newEmail, setNewEmail] = useState<string>(userData.email);
   const [newImage, setNewImage] = useState<File>();
   const [newBannerImage, setNewBannerImage] = useState<File>();
-  const [newBio, setNewBio] = useState<string>(userData.bio);
-  const [bioLen, setBioLen] = useState<number>(userData.bio.length);
+  const [newBio, setNewBio] = useState<string | null>(userData.bio);
+  const [bioLen, setBioLen] = useState<number | null>(
+    userData.bio?.length || 0,
+  );
   const [isLoading, setIsLoading] = useState(false);
-  const [imgUrl, setImgUrl] = useState<string>(userData.image);
-  const [bannerUrl, setBannerUrl] = useState<string>(userData.bannerImage);
+  const [imgUrl, setImgUrl] = useState<string | null>(userData.image);
+  const [bannerUrl, setBannerUrl] = useState<string | null>(
+    userData.bannerImage,
+  );
 
   const { data: session, update } = useSession();
 
@@ -62,8 +66,8 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
         const res = await edgestore.myPublicImages.upload({
           file: newImage,
           options: {
-            replaceTargetUrl: !userData.image ? "" : userData.image
-          }
+            replaceTargetUrl: !userData.image ? "" : userData.image,
+          },
         });
 
         try {
@@ -77,7 +81,7 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
               body: JSON.stringify({
                 image: res.url,
               }),
-            }
+            },
           );
 
           await fetch(
@@ -90,7 +94,7 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
               body: JSON.stringify({
                 authorImage: res.url,
               }),
-            }
+            },
           );
         } catch (error) {
           console.log(error);
@@ -98,9 +102,10 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
       }
       if (newBannerImage) {
         const res = await edgestore.myPublicImages.upload({
-          file: newBannerImage, options: {
-            replaceTargetUrl : !userData.bannerImage ? "" : userData.bannerImage
-          }
+          file: newBannerImage,
+          options: {
+            replaceTargetUrl: !userData.bannerImage ? "" : userData.bannerImage,
+          },
         });
 
         try {
@@ -114,7 +119,7 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
               body: JSON.stringify({
                 bannerImage: res.url,
               }),
-            }
+            },
           );
         } catch (error) {
           console.log(error);
@@ -132,7 +137,7 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
             username: newUsername,
             bio: newBio,
           }),
-        }
+        },
       );
 
       if (!res.ok) {
@@ -142,9 +147,9 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
           ...session,
           user: {
             ...session?.user,
-            username: newUsername
-          }
-        })
+            username: newUsername,
+          },
+        });
         router.push(`/profile/${newUsername}`);
         router.refresh();
         setIsLoading(false);
@@ -172,7 +177,7 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
         <div className="relative">
           <Image
             className="aspect-[4/2] h-auto w-[600px] object-cover object-top"
-            src={bannerUrl === "" ? banner : bannerUrl}
+            src={bannerUrl || banner}
             width={500}
             height={250}
             alt="banner"
@@ -187,7 +192,7 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
           <div>
             <Image
               className="absolute bottom-0 aspect-square size-36 rounded-full object-cover outline outline-white"
-              src={imgUrl === "" ? profileIcon : imgUrl}
+              src={imgUrl || profileIcon}
               width={200}
               height={200}
               alt=""
@@ -216,7 +221,7 @@ function EditProfileDashboard({ userData }: { userData: UserProps }) {
             <span className="text-xs">{bioLen}/101</span>
           </div>
           <textarea
-            value={newBio}
+            value={newBio || ""}
             maxLength={101}
             onChange={handleTextLength}
             className="h-28 resize-none rounded-lg border p-2 text-sm font-semibold outline-none"

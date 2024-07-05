@@ -26,7 +26,7 @@ function ProfileIcon({ user }: UserInfo) {
         }}
       >
         <div
-          className={` ${!drop ? "h-0 opacity-0" : "h-28 py-2 "} absolute flex w-32 -translate-x-[92px] translate-y-12 items-center overflow-hidden rounded-md bg-white px-2  shadow-lg transition-all duration-300`}
+          className={` ${!drop ? "h-0 opacity-0" : "h-28 py-2 "} absolute flex w-32 -translate-x-[92px] translate-y-12 items-center overflow-hidden rounded-md bg-white px-2 shadow-lg transition-all duration-300 dark:bg-gray-700`}
         >
           <div className="flex w-full flex-col items-center">
             <span className="text-xs">@{user.username}</span>
@@ -34,20 +34,20 @@ function ProfileIcon({ user }: UserInfo) {
             <div className="flex w-full cursor-pointer flex-col justify-start text-xs leading-6">
               <Link
                 href={`/profile/${user.username}`}
-                className="flex items-center rounded px-1 hover:bg-gray-100"
+                className="flex items-center rounded px-1 hover:bg-gray-100 dark:hover:bg-gray-600"
               >
                 <UserIcon size={14} />
                 <span className="ml-2">Profile</span>
               </Link>
               <Link
                 href={"/settings"}
-                className="flex items-center rounded px-1 hover:bg-gray-100"
+                className="flex items-center rounded px-1 hover:bg-gray-100 dark:hover:bg-gray-600"
               >
                 <Settings size={14} />
                 <span className="ml-2">Settings</span>
               </Link>
               <div
-                className="group flex items-center rounded px-1 hover:bg-gray-100"
+                className="group flex items-center rounded px-1 hover:bg-gray-100 dark:hover:bg-gray-600"
                 onClick={(e) => {
                   signOut();
                 }}
@@ -68,7 +68,7 @@ function ProfileIcon({ user }: UserInfo) {
             className="size-10 rounded-full"
           />
         </div>
-        <div className="absolute bottom-0 right-0 flex size-3 items-center justify-center rounded-full bg-gray-300 ring ring-zinc-100">
+        <div className="absolute bottom-0 right-0 flex size-3 items-center justify-center rounded-full bg-gray-300 ring-1 ring-zinc-100 dark:bg-zinc-700 dark:ring-zinc-600">
           {drop ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
         </div>
       </div>

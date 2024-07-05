@@ -5,16 +5,15 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  const id = session?.user.username as string;
+  const username = session?.user.username;
 
   const { postBody, postImage, postVideo } = await req.json();
 
   try {
     const post = await prisma.post.create({
       data: {
-        author: {
-          connect: { username: id },
-        },
+        author: { connect: { username: username } },
+        authorImage: session?.user.image as string,
         postBody,
         postImage,
         postVideo,

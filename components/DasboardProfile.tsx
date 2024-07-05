@@ -8,10 +8,9 @@ import { convertToLocaleString } from "@/lib/convertDate";
 import EditProfile from "./EditProfile";
 import Modal from "./Modal";
 import { useState } from "react";
-import { UserProps } from "@/app/types";
+import { User } from "@prisma/client";
 
-
-function DashboardProfile({user} : {user: UserProps} ) {
+function DashboardProfile({ user }: { user: User }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpenModal = () => setIsOpen(true);
@@ -20,7 +19,7 @@ function DashboardProfile({user} : {user: UserProps} ) {
     <>
       <Modal pfp={user.image} open={isOpen} close={setIsOpen} />
       <section className="flex flex-col items-center">
-        <div className="font-inter w-full border">
+        <div className="font-inter w-full rounded-lg border border-gray-800 shadow-lg dark:bg-zinc-950 ">
           <div className="relative aspect-[4/2] h-auto w-full">
             <Image
               className="w-full object-cover object-top"
@@ -34,7 +33,7 @@ function DashboardProfile({user} : {user: UserProps} ) {
           <div className="relative flex items-center justify-between px-4 py-6 max-phones:py-4">
             <div onClick={handleOpenModal}>
               <Image
-                className="absolute bottom-0 size-40 rounded-full object-cover outline outline-white max-phones:size-32"
+                className="absolute bottom-0 size-40 rounded-full object-cover outline outline-white dark:outline-zinc-950 max-phones:size-32"
                 src={user.image || profileIcon}
                 width={256}
                 height={256}

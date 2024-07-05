@@ -23,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html className="dark" lang="en">
+      <body className={`${inter.className} dark:bg-black`}>
         <NextAuthProvider>
           <EdgeStoreProvider>
             <CustomProvider>

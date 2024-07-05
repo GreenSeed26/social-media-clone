@@ -16,7 +16,7 @@ function Modal({
   open,
   close,
 }: {
-  pfp: string;
+  pfp: string | null;
   open: boolean;
   close: Dispatch<SetStateAction<boolean>>;
 }) {
@@ -27,7 +27,10 @@ function Modal({
           <div className="relative flex items-center justify-center">
             <Image
               className="size-72 rounded-full"
-              src={pfp}
+              src={
+                pfp ||
+                "/kisspng-user-profile-computer-icons-avatar-clip-art-profile-cliparts-free-5ab58cd1058c25.3471458915218475050227.png"
+              }
               alt="pfp"
               width={400}
               height={400}
