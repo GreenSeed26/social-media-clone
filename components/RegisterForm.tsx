@@ -54,25 +54,25 @@ function RegisterForm() {
         <input
           type="text"
           name="username"
-          className="h-10 rounded-lg border px-2 text-sm outline-none"
+          className="h-10 rounded-lg border px-2 text-sm outline-none "
         />
         <label className="m-1 text-sm font-bold">Email</label>
         <input
           type="text"
           name="email"
-          className="h-10 rounded-lg border px-2 text-sm outline-none"
+          className="h-10 rounded-lg border px-2 text-sm outline-none "
         />
         <label className="m-1 text-sm font-bold">Password</label>
         <input
           type="password"
           name="password"
-          className="h-10 rounded-lg border px-2 text-sm outline-none"
+          className="h-10 rounded-lg border px-2 text-sm outline-none "
         />
         <label className="m-1 text-sm font-bold">Confirm Password</label>
         <input
           type="password"
           name="confirmPassword"
-          className="h-10 rounded-lg border px-2 text-sm outline-none"
+          className="h-10 rounded-lg border px-2 text-sm outline-none "
         />
         <RegSubBtn />
         <div className="text-sm">

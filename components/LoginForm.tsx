@@ -69,7 +69,7 @@ function LoginForm() {
             setEmail(e.target.value)
           }
           type="text"
-          className="h-10 rounded-lg border px-2 text-sm outline-none"
+          className="h-10 rounded-lg border px-2 text-sm outline-none "
         />
         <label className="m-1 text-sm font-bold">Password</label>
         <input
@@ -78,11 +78,11 @@ function LoginForm() {
             setPassword(e.target.value)
           }
           type="password"
-          className="h-10 rounded-lg border px-2 text-sm outline-none"
+          className="h-10 rounded-lg border px-2 text-sm outline-none "
         />
 
         <button
-          className={`my-5 h-10 w-fit rounded-lg ${loading ? "bg-primary/80" : "bg-primary hover:bg-primary/90"} px-4 text-sm font-semibold text-white `}
+          className={`my-5 h-10 w-fit rounded-lg ${loading ? "bg-primary/80" : "bg-primary/80 hover:bg-primary/70"} px-4 text-sm font-semibold text-white `}
         >
           {loading ? "Logging In..." : "Log In"}
         </button>

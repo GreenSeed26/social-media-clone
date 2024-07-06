@@ -44,7 +44,7 @@ export const registerUser = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
 
-  if (!username || !email || !password) return ;
+  if (!username || !email || !password) return;
 
   if (password !== confirmPassword) {
     throw new Error("Passwords do not match");
@@ -63,4 +63,33 @@ export const registerUser = async (formData: FormData) => {
     console.log(error);
   }
   redirect("/login");
+};
+
+export const createPost = async (
+  postBody?: string,
+  vidUrl?: string,
+  imgUrl?: string[],
+) => {
+  "use server";
+  const session = await getServerSession(authOptions);
+
+  // if (!postBody || !vidUrl || !imgUrl) {
+  //   console.log("no input");
+  //   return
+  // }
+
+  const userId = session?.user.id as string;
+  try {
+    const post = await prisma.post.create({
+      data: {
+        author: { connect: { id: userId } },
+        postBody,
+        postVideo: vidUrl,
+        postImage: imgUrl,
+      },
+    });
+    console.log(post);
+  } catch (error) {
+    console.log(error);
+  }
 };
