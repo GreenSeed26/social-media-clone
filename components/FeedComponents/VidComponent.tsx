@@ -3,11 +3,12 @@
 import { Volume2, VolumeX, Play, Pause } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
-function VidComponent({ video }: { video: string | null}) {
+function VidComponent({ video }: { video: string | null }) {
   const [progress, setProgress] = useState(0);
   const vidRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsplaying] = useState(false);
   const [mute, setMute] = useState(true);
+
   return (
     <>
       {video && (

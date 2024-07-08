@@ -2,18 +2,18 @@
 
 import { CalendarRange, Mail, MoreVertical, UserPlus } from "lucide-react";
 import Image from "next/image";
-import profileIcon from "../public/kisspng-user-profile-computer-icons-avatar-clip-art-profile-cliparts-free-5ab58cd1058c25.3471458915218475050227.png";
-import banner from "../public/banner.jpg";
+import profileIcon from "@/public/default_icon.png";
+import banner from "@/public/banner.jpg";
 import { convertToLocaleString } from "@/lib/convertDate";
-import Modal from "./Modal";
+import Modal from "../Modal";
 import { useState } from "react";
-import { UserInfo } from "@/app/types";
+import { User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
-function DisplayProfile({ user }: { user: UserInfo }) {
+function DisplayProfile({ user }: { user: User | null }) {
   const [open, setOpen] = useState(false);
-  const createdAtEn = convertToLocaleString(user.user.createdAt);
+  const createdAtEn = convertToLocaleString(user?.createdAt || "");
 
   const { data: session, status } = useSession();
 
@@ -23,15 +23,13 @@ function DisplayProfile({ user }: { user: UserInfo }) {
 
   return (
     <>
-      <Modal pfp={user.user.image} open={open} close={setOpen} />
+      <Modal pfp={user?.image || ""} open={open} close={setOpen} />
       <section className="flex flex-col items-center">
         <div className="font-inter w-full border">
           <div>
             <Image
               className="aspect-[4/2] h-auto w-full object-cover object-top"
-              src={
-                user.user.bannerImage === "" ? banner : user.user.bannerImage
-              }
+              src={user?.bannerImage || banner}
               width={800}
               height={400}
               alt="banner"
@@ -42,7 +40,7 @@ function DisplayProfile({ user }: { user: UserInfo }) {
             <div onClick={() => setOpen(true)}>
               <Image
                 className=" absolute bottom-0 size-40 rounded-full object-cover outline outline-white max-phones:size-32"
-                src={user.user.image === "" ? profileIcon : user.user.image}
+                src={user?.image || profileIcon}
                 width={256}
                 height={256}
                 loading="lazy"
@@ -66,12 +64,12 @@ function DisplayProfile({ user }: { user: UserInfo }) {
           </div>
           <div className="mx-4 my-2 flex flex-col gap-2">
             <div>
-              <h1 className="text-xl font-extrabold">{user.user.username}</h1>
-              <span className="text-sm text-gray-700">{user.user.email}</span>
+              <h1 className="text-xl font-extrabold">{user?.username}</h1>
+              <span className="text-sm text-gray-700">{user?.email}</span>
             </div>
-            {user.user.bio !== "" && (
+            {user?.bio !== "" && (
               <div className=" flex flex-col text-sm ">
-                <span className=" whitespace-pre">{user.user.bio}</span>
+                <span className=" whitespace-pre">{user?.bio}</span>
               </div>
             )}
 

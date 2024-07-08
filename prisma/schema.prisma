@@ -13,22 +13,21 @@ model User {
   email       String   @unique
   password    String
   image       String?
-  bannerImage String   @default("")
-  bio         String   @default("")
+  bannerImage String?
+  bio         String?
   post        Post[]
   likes       Likes[]
   createdAt   DateTime @default(now())
 }
 
 model Post {
-  id          String   @id @default(uuid())
-  postBody    String   @default("")
-  postImage   String[]
-  postVideo   String?
-  author      User     @relation(fields: [authorId], references: [username])
-  authorId    String
-  authorImage String   @default("")
-  likes       Likes[]
+  id        String   @id @default(uuid())
+  postBody  String?
+  postImage String[]
+  postVideo String?
+  author    User     @relation(fields: [authorId], references: [username])
+  authorId  String
+  likes     Likes[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

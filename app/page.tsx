@@ -1,5 +1,5 @@
 import HomePage from "@/components/HomePage";
-import Post from "@/components/Post";
+import Post from "@/components/FeedComponents/Post";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";

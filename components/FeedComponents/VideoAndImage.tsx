@@ -47,6 +47,7 @@ export function ImageInput({
     if (files) {
       const imageFile = Array.from(files);
       const imgPrev = imageFile.map((file) => URL.createObjectURL(file));
+      const img = new Image();
       getImage(imgPrev, imageFile);
     }
   };

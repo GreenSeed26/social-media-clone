@@ -10,13 +10,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import defaultIcon from "@/public/default_icon.png";
 
 function Modal({
   pfp,
   open,
   close,
 }: {
-  pfp: string;
+  pfp: string | null;
   open: boolean;
   close: Dispatch<SetStateAction<boolean>>;
 }) {
@@ -27,7 +28,7 @@ function Modal({
           <div className="relative flex items-center justify-center">
             <Image
               className="size-72 rounded-full"
-              src={pfp}
+              src={pfp || defaultIcon}
               alt="pfp"
               width={400}
               height={400}

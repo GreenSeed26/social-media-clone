@@ -3,7 +3,6 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "./db";
 import { compare } from "bcrypt";
-import defaultIcon from "@/public/kisspng-user-profile-computer-icons-avatar-clip-art-profile-cliparts-free-5ab58cd1058c25.3471458915218475050227.png";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),

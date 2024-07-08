@@ -23,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html className="" lang="en">
+      <body className={`${inter.className}`}>
         <NextAuthProvider>
           <EdgeStoreProvider>
             <CustomProvider>
