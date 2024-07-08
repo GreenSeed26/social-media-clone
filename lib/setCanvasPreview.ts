@@ -1,9 +1,9 @@
 import { PixelCrop } from "react-image-crop";
 
-const setCanvasPreview = (
+export const setCanvasPreview = (
   image: HTMLImageElement,
   canvas: HTMLCanvasElement,
-  crop: PixelCrop
+  crop: PixelCrop,
 ) => {
   const ctx = canvas.getContext("2d");
 
@@ -35,10 +35,16 @@ const setCanvasPreview = (
     0,
     0,
     image.naturalWidth,
-    image.naturalHeight
+    image.naturalHeight,
   );
 
-  ctx.restore()
+  ctx.restore();
 };
 
-export default setCanvasPreview
+export const getCroppedImage = (
+  imageSrc: string,
+  canvas: HTMLCanvasElement,
+  pixelCrop: number | null,
+) => {
+  const ctx = canvas.getContext("2d");
+};

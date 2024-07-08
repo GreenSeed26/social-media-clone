@@ -1,7 +1,9 @@
 import { ReactNode } from "react";
 
-export function convertToLocaleString(createdAt: string | Date): ReactNode {
-  const dateString = createdAt;
+export function convertToLocaleString(
+  createdAt: string | Date | null,
+): ReactNode {
+  const dateString = createdAt as string;
   const date = new Date(dateString);
   const formattedDate = date.toLocaleDateString("en-US", {
     month: "long",
@@ -9,5 +11,5 @@ export function convertToLocaleString(createdAt: string | Date): ReactNode {
     year: "numeric",
   });
 
-  return formattedDate // Output: May 10, 2024
+  return formattedDate; // Output: May 10, 2024
 }

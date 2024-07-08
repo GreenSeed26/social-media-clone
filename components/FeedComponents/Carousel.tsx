@@ -20,7 +20,7 @@ function Carousel({ images }: { images: string[] }) {
   return (
     <>
       {images.length > 1 && (
-        <div className="h-[500px] w-full bg-black">
+        <div className="h-[500px] w-full">
           <div className="relative h-full w-full">
             <div className="flex h-full w-full overflow-hidden">
               {images.map((url, index) => (
@@ -31,7 +31,7 @@ function Carousel({ images }: { images: string[] }) {
                   width={1500}
                   height={1500}
                   style={{ transform: `translateX(${-100 * curr}%)` }}
-                  className="block h-full w-full shrink-0 grow-0 object-contain transition-transform duration-300 ease-in-out"
+                  className="block h-full w-full shrink-0 grow-0 rounded-lg object-cover transition-transform duration-300 ease-in-out"
                 />
               ))}
             </div>
@@ -78,9 +78,9 @@ function Carousel({ images }: { images: string[] }) {
           <Image
             src={images[0]}
             alt=""
-            width={500}
-            height={500}
-            className="block h-full w-full object-contain"
+            width={1500}
+            height={1500}
+            className="block h-full w-full object-cover"
           />
         </div>
       )}

@@ -4,6 +4,7 @@ import { authOptions } from "./auth";
 import prisma from "./db";
 import { hash } from "bcrypt";
 import { redirect } from "next/navigation";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export const switchLike = async (postId: string) => {
   const session = await getServerSession(authOptions);
@@ -36,6 +37,8 @@ export const switchLike = async (postId: string) => {
   } catch (error) {
     console.log(error);
   }
+
+  revalidatePath("/");
 };
 
 export const registerUser = async (formData: FormData) => {
@@ -70,13 +73,7 @@ export const createPost = async (
   vidUrl?: string,
   imgUrl?: string[],
 ) => {
-  "use server";
   const session = await getServerSession(authOptions);
-
-  // if (!postBody || !vidUrl || !imgUrl) {
-  //   console.log("no input");
-  //   return
-  // }
 
   const userId = session?.user.id as string;
   try {
@@ -88,8 +85,38 @@ export const createPost = async (
         postImage: imgUrl,
       },
     });
-    console.log(post);
   } catch (error) {
     console.log(error);
   }
+  revalidatePath("/");
+};
+
+export const updateProfile = async (
+  username?: string,
+  email?: string,
+  bio?: string,
+  image?: string,
+  bannerImage?: string,
+) => {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user.id as string;
+  console.log(username, email, bio, image, bannerImage);
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        username,
+        email,
+        bio,
+        image,
+        bannerImage,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  revalidatePath(`/profile/${username}`);
+  redirect(`/profile/${username}`);
 };

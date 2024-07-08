@@ -1,6 +1,8 @@
-import { UserInfo } from "@/app/types";
-import DashboardProfile from "@/components/DasboardProfile";
+import DashboardProfile from "@/components/Dashboard/DasboardProfile";
+import NoPost from "@/components/Dashboard/NoPost";
+import PostBody from "@/components/FeedComponents/PostBody";
 import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/db";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
@@ -12,9 +14,11 @@ export const generateMetadata = ({
   params: {
     username: string;
   };
-}): Metadata => {return {
-  title: `${params.username}`
-}};
+}): Metadata => {
+  return {
+    title: `${params.username}`,
+  };
+};
 
 async function Dashboard({
   params,
@@ -28,14 +32,43 @@ async function Dashboard({
     redirect("/login");
   }
   const { username } = params;
-  const res = await fetch(`${process.env.API_URL}/api/user/${username}`, {
-    cache: "no-store",
+
+  const user = await prisma.user.findUnique({
+    where: {
+      username: username,
+    },
   });
-  const user: UserInfo = await res.json();
+  let post: any[] = [];
+
+  post = await prisma.post.findMany({
+    where: {
+      author: {
+        username,
+      },
+    },
+    include: {
+      author: true,
+      likes: {
+        select: {
+          userId: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  console.log(post);
 
   return (
     <div className="mx-auto w-[40rem] max-sm:w-full">
-      <DashboardProfile user={user.user} />
+      <DashboardProfile user={user} />
+      {post.length ? (
+        post.map((post) => <PostBody key={post.id} post={post} />)
+      ) : (
+        <NoPost />
+      )}
     </div>
   );
 }

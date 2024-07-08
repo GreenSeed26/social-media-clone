@@ -12,10 +12,9 @@ import ReactCrop, {
   type Crop,
 } from "react-image-crop";
 import NextImage from "next/image";
-import { ChangeEvent, SyntheticEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import setCanvasPreview from "@/lib/setCanvasPreview";
 import { User } from "lucide-react";
-import { Button } from "./ui/button";
 
 const MIN_DIM = 150;
 const ASPECT_RATIO = 1;
@@ -89,7 +88,7 @@ function ChangeProfilePic({
       prevCanvasRef.current,
       convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height),
     );
-    const dataUrl = prevCanvasRef.current.toBlob((blob) => {
+    prevCanvasRef.current.toBlob((blob) => {
       const file = new File([blob as Blob], "image", { type: blob?.type });
 
       updateProfileUrl(file);
@@ -109,7 +108,7 @@ function ChangeProfilePic({
           className="flex cursor-pointer items-center rounded bg-gray-300/50 px-2 py-1 text-sm backdrop-blur-sm transition-colors hover:bg-gray-300/70"
         >
           <User size={15} />
-          <span className="phones:block ml-1 hidden text-xs">
+          <span className="ml-1 hidden text-xs phones:block">
             Change Profile Picture
           </span>
         </label>

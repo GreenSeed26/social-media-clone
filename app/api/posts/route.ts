@@ -13,7 +13,6 @@ export async function POST(req: Request) {
     const post = await prisma.post.create({
       data: {
         author: { connect: { username: username } },
-        authorImage: session?.user.image as string,
         postBody,
         postImage,
         postVideo,

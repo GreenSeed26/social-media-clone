@@ -1,15 +1,16 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import CreatePost from "./CreatePost";
+import CreatePost from "./FeedComponents/CreatePost";
 import { ImageIcon, VideoIcon } from "lucide-react";
-import defaultIcon from "@/public/kisspng-user-profile-computer-icons-avatar-clip-art-profile-cliparts-free-5ab58cd1058c25.3471458915218475050227.png";
+import defaultIcon from "@/public/default_icon.png";
 import { UserProps } from "@/app/types";
+import NewPostForm from "./FeedComponents/NewPostForm";
 
 function HomePage({ user }: { user: UserProps }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="mx-auto w-[440px] flex-col justify-center border-x border-b p-2 max-phones:w-full">
+    <div className="mx-auto w-[480px] flex-col justify-center border-x border-b p-2 max-phones:w-full">
       <div className="flex items-center">
         <Image
           src={user.image ? user.image : defaultIcon}
@@ -18,7 +19,8 @@ function HomePage({ user }: { user: UserProps }) {
           alt="pfpIcon"
           className="mr-2 size-10 rounded-full"
         />
-        <CreatePost username={user.username} open={open} setOpen={setOpen} />
+        <NewPostForm/>
+        {/* <CreatePost username={user.username} open={open} setOpen={setOpen} /> */}
       </div>
       <div className="mt-2 flex justify-between divide-x-2">
         <label

@@ -3,7 +3,7 @@ import { Skeleton } from "./ui/skeleton";
 function SkeletonUI() {
   return (
     <>
-      <div className="mx-auto mt-6 w-[440px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
+      <div className="mx-auto mt-6 w-[480px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
         <span className="flex items-center px-2">
           <Skeleton className="my-2 size-8 rounded-full" />
           <Skeleton className="mx-2 h-4 w-20" />
@@ -14,7 +14,7 @@ function SkeletonUI() {
           <Skeleton className="my-2 h-4 w-5/6" />
         </div>
       </div>
-      <div className="mx-auto mt-6 w-[440px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
+      <div className="mx-auto mt-6 w-[480px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
         <span className="flex items-center px-2">
           <Skeleton className="my-2 size-8 rounded-full" />
           <Skeleton className="mx-2 h-4 w-20" />
@@ -25,7 +25,7 @@ function SkeletonUI() {
           <Skeleton className="my-2 h-4 w-5/6" />
         </div>
       </div>
-      <div className="mx-auto mt-6 w-[440px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
+      <div className="mx-auto mt-6 w-[480px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
         <span className="flex items-center px-2">
           <Skeleton className="my-2 size-8 rounded-full" />
           <Skeleton className="mx-2 h-4 w-20" />
@@ -36,7 +36,7 @@ function SkeletonUI() {
           <Skeleton className="my-2 h-4 w-5/6" />
         </div>
       </div>
-      <div className="mx-auto mt-6 w-[440px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
+      <div className="mx-auto mt-6 w-[480px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
         <span className="flex items-center px-2">
           <Skeleton className="my-2 size-8 rounded-full" />
           <Skeleton className="mx-2 h-4 w-20" />
@@ -47,7 +47,7 @@ function SkeletonUI() {
           <Skeleton className="my-2 h-4 w-5/6" />
         </div>
       </div>
-      <div className="mx-auto mt-6 w-[440px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
+      <div className="mx-auto mt-6 w-[480px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
         <span className="flex items-center px-2">
           <Skeleton className="my-2 size-8 rounded-full" />
           <Skeleton className="mx-2 h-4 w-20" />
@@ -58,7 +58,7 @@ function SkeletonUI() {
           <Skeleton className="my-2 h-4 w-5/6" />
         </div>
       </div>
-      <div className="mx-auto mt-6 w-[440px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
+      <div className="mx-auto mt-6 w-[480px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
         <span className="flex items-center px-2">
           <Skeleton className="my-2 size-8 rounded-full" />
           <Skeleton className="mx-2 h-4 w-20" />
@@ -69,7 +69,7 @@ function SkeletonUI() {
           <Skeleton className="my-2 h-4 w-5/6" />
         </div>
       </div>
-      <div className="mx-auto mt-6 w-[440px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
+      <div className="mx-auto mt-6 w-[480px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
         <span className="flex items-center px-2">
           <Skeleton className="my-2 size-8 rounded-full" />
           <Skeleton className="mx-2 h-4 w-20" />
@@ -80,7 +80,7 @@ function SkeletonUI() {
           <Skeleton className="my-2 h-4 w-5/6" />
         </div>
       </div>
-      <div className="mx-auto mt-6 w-[440px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
+      <div className="mx-auto mt-6 w-[480px] rounded border py-2 max-phones:w-full max-phones:rounded-none">
         <span className="flex items-center px-2">
           <Skeleton className="my-2 size-8 rounded-full" />
           <Skeleton className="mx-2 h-4 w-20" />

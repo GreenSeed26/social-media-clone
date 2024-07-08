@@ -25,23 +25,4 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { username: string } }
-) {
-  const { authorImage } = await req.json();
-  const username = params.username;
 
-  try {
-    const post = await prisma.post.updateMany({
-      where: { authorId: username },
-      data: {
-        authorImage,
-      },
-    });
-
-    return NextResponse.json({ post });
-  } catch (error) {
-    console.log(error);
-  }
-}

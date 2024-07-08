@@ -1,16 +1,16 @@
-import defaultIcon from "../public/kisspng-user-profile-computer-icons-avatar-clip-art-profile-cliparts-free-5ab58cd1058c25.3471458915218475050227.png";
-import SkeletonUI from "./SkeletonUI";
-import Image from "next/image";
+import defaultIcon from "@/public/default_icon.png";
+import SkeletonUI from "../SkeletonUI";
+import NextImage from "next/image";
 import { convertToLocaleString } from "@/lib/convertDate";
 import Link from "next/link";
 import useSWR from "swr";
 import PostInteraction from "./PostInteraction";
-import DdButton from "./DdButton";
+import DdButton from "../DdButton";
 import Carousel from "./Carousel";
 import VidComponent from "./VidComponent";
 import { Post as PostType, User } from "@prisma/client";
 
-type FeedPostType = PostType & { user: User } & {
+type FeedPostType = PostType & { author: User } & {
   likes: [{ userId: string }];
 };
 
@@ -19,15 +19,15 @@ function PostBody({ post }: { post: FeedPostType }) {
     <>
       <div
         key={post.id}
-        className="mx-auto mt-6 w-[440px] overflow-hidden rounded border py-2 max-phones:w-full max-phones:rounded-none"
+        className="mx-auto mt-6 w-[450px] overflow-hidden rounded border py-2 max-phones:w-full max-phones:rounded-none"
       >
         <div className="flex items-center px-2">
           <Link
             href={`/${post.authorId}`}
             className="size-8 cursor-pointer hover:opacity-85"
           >
-            <Image
-              src={!post.authorImage ? defaultIcon : post.authorImage}
+            <NextImage
+              src={post.author.image || defaultIcon}
               alt=""
               width={50}
               height={50}

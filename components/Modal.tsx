@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import defaultIcon from "@/public/default_icon.png";
 
 function Modal({
   pfp,
@@ -27,10 +28,7 @@ function Modal({
           <div className="relative flex items-center justify-center">
             <Image
               className="size-72 rounded-full"
-              src={
-                pfp ||
-                "/kisspng-user-profile-computer-icons-avatar-clip-art-profile-cliparts-free-5ab58cd1058c25.3471458915218475050227.png"
-              }
+              src={pfp || defaultIcon}
               alt="pfp"
               width={400}
               height={400}

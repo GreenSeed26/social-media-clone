@@ -1,7 +1,7 @@
 "use client";
 import { Heart, MessageCircleMore } from "lucide-react";
 import React, { useOptimistic, useState } from "react";
-import { Separator } from "./ui/separator";
+import { Separator } from "../ui/separator";
 import { useSession } from "next-auth/react";
 import { switchLike } from "@/lib/actions";
 
@@ -37,7 +37,9 @@ function PostInteraction({
         likeCount: state.isLiked ? state.likeCount - 1 : state.likeCount + 1,
         isLiked: !state.isLiked,
       }));
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -54,6 +56,7 @@ function PostInteraction({
           <span className="text-xs">{optimisticLike.likeCount}</span>
         </button>
       </form>
+
       <button className="flex items-center gap-1 rounded bg-gray-300 p-1">
         <MessageCircleMore size={15} className="text-gray-800" />
         <div className="h-4 border border-gray-400"></div>

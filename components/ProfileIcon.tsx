@@ -11,7 +11,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import defaultIcon from "@/public/kisspng-user-profile-computer-icons-avatar-clip-art-profile-cliparts-free-5ab58cd1058c25.3471458915218475050227.png";
+import defaultIcon from "@/public/default_icon.png";
 import { UserInfo } from "@/app/types";
 
 function ProfileIcon({ user }: UserInfo) {

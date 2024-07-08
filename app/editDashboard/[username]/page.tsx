@@ -1,4 +1,4 @@
-import EditProfile from "@/components/EditProfileDashboard";
+import EditProfile from "@/components/Dashboard/EditProfileDashboard";
 import "react-image-crop/dist/ReactCrop.css";
 
 import { authOptions } from "@/lib/auth";
@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { UserInfo, UserProps } from "@/app/types";
 import { Metadata } from "next";
+import prisma from "@/lib/db";
 
 export const generateMetadata = ({
   params,
@@ -15,7 +16,7 @@ export const generateMetadata = ({
   };
 }): Metadata => {
   return {
-    title: 'Edit',
+    title: "Edit",
   };
 };
 
@@ -28,15 +29,14 @@ async function EditDasboard({ params }: { params: { username: string } }) {
 
   const { username } = params;
 
-  const res = await fetch(`${process.env.API_URL}/api/user/${username}`, {
-    cache: "no-store",
+  const user = await prisma.user.findUnique({
+    where: {
+      username,
+    },
   });
 
-  const user: UserInfo = await res.json();
   return (
-    <>
-      {user ? <EditProfile userData={user.user} /> : <div>User not found</div>}
-    </>
+    <>{user ? <EditProfile userData={user} /> : <div>User not found</div>}</>
   );
 }
 
