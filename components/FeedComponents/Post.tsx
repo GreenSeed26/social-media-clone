@@ -22,7 +22,7 @@ async function Post({ username }: { username?: string }) {
         },
         _count: {
           select: {
-            Comment: true,
+            comments: true,
           },
         },
       },

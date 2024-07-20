@@ -55,7 +55,7 @@ async function Dashboard({
       },
       _count: {
         select: {
-          Comment: true,
+          comments: true,
         },
       },
     },

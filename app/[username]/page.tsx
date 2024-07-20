@@ -61,7 +61,7 @@ async function ProfilePage({ params }: { params: { username: string } }) {
       },
       _count: {
         select: {
-          Comment: true,
+          comments: true,
         },
       },
     },
