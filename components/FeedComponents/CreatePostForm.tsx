@@ -108,23 +108,19 @@ export default function CreatePostForm({
 
   return (
     <form action={handleMediaUpload} className="flex flex-col">
-      <div className="textarea-scroll h-[350px] w-full overflow-hidden overflow-y-scroll">
+      <div className="textarea-scroll max-h-96 w-full overflow-hidden overflow-y-scroll">
         <textarea
           ref={textAreaRef}
-          className="h-auto w-full resize-none whitespace-pre-wrap text-sm outline-none"
+          className="h-auto  w-full resize-none whitespace-pre-wrap text-sm outline-none"
           name="postBody"
           placeholder={`What's on your mind, ${"placeholder"}?`}
         ></textarea>
-        <div className="mx-auto flex aspect-square w-96 flex-col items-center justify-center rounded-lg border-2  border-dashed border-gray-400">
-          {imgPrev ? (
+        {imgPrev.length > 0 && (
+          <div className="flex aspect-square w-full flex-col items-center justify-center rounded-lg">
             <Carousel images={imgPrev} />
-          ) : (
-            <>
-              <ImagePlus className="text-gray-400" size={60} />
-              <p className="text-sm text-gray-400">Add photos or video</p>
-            </>
-          )}
-        </div>
+          </div>
+        )}
+
         {vidPrev && (
           <video
             className="h-96 w-full"

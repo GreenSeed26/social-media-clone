@@ -1,46 +1,54 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
-import CreatePost from "./FeedComponents/CreatePost";
+import React, { Suspense, useState } from "react";
 import { ImageIcon, VideoIcon } from "lucide-react";
 import defaultIcon from "@/public/default_icon.png";
-import { UserProps } from "@/app/types";
 import NewPostForm from "./FeedComponents/NewPostForm";
+import { Post, User } from "@prisma/client";
+import SkeletonUI from "./SkeletonUI";
+import Posts from "./FeedComponents/Post";
+import CreatePost from "./FeedComponents/CreatePost";
 
-function HomePage({ user }: { user: UserProps }) {
+type HomeProps = {
+  user: User & { post: Post[] };
+};
+
+function HomePage({ user }: HomeProps) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="mx-auto w-[480px] flex-col justify-center border-x border-b p-2 max-phones:w-full">
-      <div className="flex items-center">
-        <Image
-          src={user.image ? user.image : defaultIcon}
-          width={60}
-          height={60}
-          alt="pfpIcon"
-          className="mr-2 size-10 rounded-full"
-        />
-        <NewPostForm/>
-        {/* <CreatePost username={user.username} open={open} setOpen={setOpen} /> */}
-      </div>
-      <div className="mt-2 flex justify-between divide-x-2">
-        <label
-          onClick={() => setOpen(true)}
-          id="image"
-          className="flex w-full items-center justify-center gap-1 p-1 hover:bg-gray-100"
-        >
-          <ImageIcon size={20} className="text-blue-400" />
-          <span className="text-sm">Photo</span>
-        </label>
+    <>
+      <div className="mx-auto w-[480px] flex-col justify-center border-x border-b p-2 max-phones:w-full">
+        <div className="flex items-center">
+          <Image
+            src={user?.image || defaultIcon}
+            width={60}
+            height={60}
+            alt="pfpIcon"
+            className="mr-2 size-10 rounded-full"
+          />
+          {/* <NewPostForm user={user} /> */}
+          <CreatePost username={user.username} open={open} setOpen={setOpen} />
+        </div>
+        <div className="mt-2 flex justify-between divide-x-2">
+          <label
+            onClick={() => setOpen(true)}
+            id="image"
+            className="flex w-full items-center justify-center gap-1 p-1 hover:bg-gray-100"
+          >
+            <ImageIcon size={20} className="text-blue-400" />
+            <span className="text-sm">Photo</span>
+          </label>
 
-        <label
-          onClick={() => setOpen(true)}
-          className="flex w-full items-center justify-center gap-1 p-1 hover:bg-gray-100"
-        >
-          <VideoIcon size={20} className=" text-rose-500" />
-          <span className="text-sm ">Video</span>
-        </label>
+          <label
+            onClick={() => setOpen(true)}
+            className="flex w-full items-center justify-center gap-1 p-1 hover:bg-gray-100"
+          >
+            <VideoIcon size={20} className=" text-rose-500" />
+            <span className="text-sm ">Video</span>
+          </label>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

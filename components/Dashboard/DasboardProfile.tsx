@@ -19,7 +19,7 @@ function DashboardProfile({ user }: { user: User | null }) {
     <>
       <Modal pfp={user?.image || ""} open={isOpen} close={setIsOpen} />
       <section className="flex flex-col items-center">
-        <div className="font-inter w-full rounded-b-lg border border-gray-800 shadow-lg  ">
+        <div className="font-inter w-full rounded-b-lg border shadow-lg  ">
           <div className="relative aspect-[4/2] h-auto w-full">
             <Image
               className="w-full object-cover object-top"

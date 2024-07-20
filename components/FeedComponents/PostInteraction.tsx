@@ -1,16 +1,18 @@
 "use client";
-import { Heart, MessageCircleMore } from "lucide-react";
+import { Heart, MessageCircleMore, SendHorizonal } from "lucide-react";
 import React, { useOptimistic, useState } from "react";
-import { Separator } from "../ui/separator";
 import { useSession } from "next-auth/react";
 import { switchLike } from "@/lib/actions";
+import Image from "next/image";
 
-function PostInteraction({
+export function PostInteraction({
   postId,
   likes,
+  comments,
 }: {
   postId: string;
   likes: string[];
+  comments: number;
 }) {
   const { data: session } = useSession();
   const userId = session?.user.id;
@@ -43,27 +45,27 @@ function PostInteraction({
   };
 
   return (
-    <div className="mx-2 mt-1 flex items-center gap-2 border-t pt-2">
-      <form action={likeAction}>
+    <>
+      <div className="mx-2 my-1 flex items-center gap-2 border-y py-2">
+        <form action={likeAction}>
+          <button className="flex items-center gap-1 rounded bg-gray-300 p-1">
+            {optimisticLike.isLiked ? (
+              <Heart size={15} className="text-red-500" fill="red" />
+            ) : (
+              <Heart size={15} className="text-gray-800" />
+            )}
+
+            <div className="h-4 border border-gray-400"></div>
+            <span className="text-xs">{optimisticLike.likeCount}</span>
+          </button>
+        </form>
+
         <button className="flex items-center gap-1 rounded bg-gray-300 p-1">
-          {optimisticLike.isLiked ? (
-            <Heart size={15} className="text-red-500" fill="red" />
-          ) : (
-            <Heart size={15} className="text-gray-800" />
-          )}
-
+          <MessageCircleMore size={15} className="text-gray-800" />
           <div className="h-4 border border-gray-400"></div>
-          <span className="text-xs">{optimisticLike.likeCount}</span>
+          <span className="text-xs">{comments}</span>
         </button>
-      </form>
-
-      <button className="flex items-center gap-1 rounded bg-gray-300 p-1">
-        <MessageCircleMore size={15} className="text-gray-800" />
-        <div className="h-4 border border-gray-400"></div>
-        <span className="text-xs">0</span>
-      </button>
-    </div>
+      </div>
+    </>
   );
 }
-
-export default PostInteraction;

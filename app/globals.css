@@ -94,6 +94,11 @@
     background: #d8d8d8;
     border-radius: 100px;
   }
+
+  .inviscroll::-webkit-scrollbar {
+    display: none;
+  }
+
   .custom-grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 2fr));
   }

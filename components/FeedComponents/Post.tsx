@@ -20,6 +20,11 @@ async function Post({ username }: { username?: string }) {
             userId: true,
           },
         },
+        _count: {
+          select: {
+            Comment: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",

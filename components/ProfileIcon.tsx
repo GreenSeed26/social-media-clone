@@ -1,5 +1,5 @@
 "use client";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Separator } from "@radix-ui/react-separator";
 import {
   ChevronDown,
@@ -12,11 +12,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import defaultIcon from "@/public/default_icon.png";
-import { UserInfo } from "@/app/types";
-
-function ProfileIcon({ user }: UserInfo) {
+import { User } from "@prisma/client";
+function ProfileIcon({ user }: { user: User | null }) {
   const [drop, setDrop] = useState(false);
-
   return (
     <>
       <div
@@ -29,11 +27,11 @@ function ProfileIcon({ user }: UserInfo) {
           className={` ${!drop ? "h-0 opacity-0" : "h-28 py-2 "} absolute flex w-32 -translate-x-[92px] translate-y-12 items-center overflow-hidden rounded-md bg-white px-2 shadow-lg transition-all duration-300`}
         >
           <div className="flex w-full flex-col items-center">
-            <span className="text-xs">@{user.username}</span>
+            <span className="truncate text-xs">@{user?.username}</span>
             <Separator className="my-0.5 h-[1px] w-full bg-gray-200" />
             <div className="flex w-full cursor-pointer flex-col justify-start text-xs leading-6">
               <Link
-                href={`/profile/${user.username}`}
+                href={`/profile/${user?.username}`}
                 className="flex items-center rounded px-1 hover:bg-gray-100 "
               >
                 <UserIcon size={14} />
@@ -60,7 +58,7 @@ function ProfileIcon({ user }: UserInfo) {
         </div>
         <div className="relative">
           <Image
-            src={user.image ? user.image : defaultIcon}
+            src={user?.image || defaultIcon}
             alt=""
             height={80}
             width={80}

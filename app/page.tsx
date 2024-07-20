@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { UserInfo } from "./types";
 import SkeletonUI from "@/components/SkeletonUI";
+import prisma from "@/lib/db";
+import Friends from "@/components/Aside/Friends";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -13,22 +15,30 @@ export default async function Home() {
   if (!session) {
     redirect("/login");
   }
+  const username = session?.user?.username;
 
-  const res = await fetch(
-    `${process.env.API_URL}/api/user/${session?.user?.username}`,
-    {
-      cache: "no-store",
+  const user: any = await prisma.user.findUnique({
+    where: {
+      username: username,
     },
-  );
+  });
 
-  const userData: UserInfo = await res.json();
+  const users = await prisma.user.findMany();
 
   return (
     <>
-      <HomePage user={userData.user} />
-      <Suspense fallback={<SkeletonUI />}>
-        <Post />
-      </Suspense>
+      <section className="gap-8 lg:flex">
+        <aside className="relative hidden w-full lg:block">Menu</aside>
+        <article className="">
+          <HomePage user={user} />
+          <Suspense fallback={<SkeletonUI />}>
+            <Post />
+          </Suspense>
+        </article>
+        <aside className="hidden w-full lg:block">
+          <Friends user={users} />
+        </aside>
+      </section>
     </>
   );
 }

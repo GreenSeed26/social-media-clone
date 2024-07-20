@@ -9,11 +9,9 @@ export function VideoInput({
 }) {
   const handleVideo = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(file);
 
     if (file && file.type.startsWith("video/")) {
       const vidUrl = URL.createObjectURL(file);
-      console.log(vidUrl);
       getVideo(vidUrl, file);
     }
   };

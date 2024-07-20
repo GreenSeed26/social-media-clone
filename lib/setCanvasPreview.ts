@@ -1,9 +1,10 @@
+import { Area } from "react-easy-crop";
 import { PixelCrop } from "react-image-crop";
 
-export const setCanvasPreview = (
+export const canvasPreview = (
   image: HTMLImageElement,
   canvas: HTMLCanvasElement,
-  crop: PixelCrop,
+  crop: PixelCrop
 ) => {
   const ctx = canvas.getContext("2d");
 
@@ -35,7 +36,7 @@ export const setCanvasPreview = (
     0,
     0,
     image.naturalWidth,
-    image.naturalHeight,
+    image.naturalHeight
   );
 
   ctx.restore();
@@ -43,8 +44,43 @@ export const setCanvasPreview = (
 
 export const getCroppedImage = (
   imageSrc: string,
-  canvas: HTMLCanvasElement,
-  pixelCrop: number | null,
-) => {
-  const ctx = canvas.getContext("2d");
+  pixelCrop: Area,
+  canvas: HTMLCanvasElement
+): Promise<File> => {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.src = imageSrc;
+    image.onload = () => {
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        return reject(new Error("No 2d Context"));
+      }
+
+      canvas.width = pixelCrop.width;
+      canvas.height = pixelCrop.height;
+      ctx.drawImage(
+        image,
+        pixelCrop.x,
+        pixelCrop.y,
+        pixelCrop.width,
+        pixelCrop.height,
+        0,
+        0,
+        pixelCrop.width,
+        pixelCrop.height
+      );
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], "image2bcropped", {
+            type: "image/png",
+          });
+          resolve(file);
+        }
+      }, "image/png");
+    };
+    image.onerror = (err) => {
+      reject(err);
+    };
+  });
 };

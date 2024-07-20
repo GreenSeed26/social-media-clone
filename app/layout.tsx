@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html className="" lang="en">
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} `}>
         <NextAuthProvider>
           <EdgeStoreProvider>
             <CustomProvider>

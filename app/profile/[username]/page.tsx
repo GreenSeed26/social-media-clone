@@ -53,13 +53,16 @@ async function Dashboard({
           userId: true,
         },
       },
+      _count: {
+        select: {
+          Comment: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
   });
-
-  console.log(post);
 
   return (
     <div className="mx-auto w-[40rem] max-sm:w-full">

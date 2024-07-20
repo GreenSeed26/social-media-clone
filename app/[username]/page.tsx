@@ -2,7 +2,7 @@ import DisplayProfile from "@/components/Dashboard/DisplayProfile";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Metadata } from "next";
 import prisma from "@/lib/db";
 import PostBody from "@/components/FeedComponents/PostBody";
@@ -36,6 +36,14 @@ async function ProfilePage({ params }: { params: { username: string } }) {
     },
   });
 
+  const userExist = await prisma.user.findUnique({
+    where: {
+      username: username,
+    },
+  });
+
+  if (!userExist) return notFound();
+
   let post: any[] = [];
 
   post = await prisma.post.findMany({
@@ -49,6 +57,11 @@ async function ProfilePage({ params }: { params: { username: string } }) {
       likes: {
         select: {
           userId: true,
+        },
+      },
+      _count: {
+        select: {
+          Comment: true,
         },
       },
     },

@@ -1,17 +1,21 @@
 import defaultIcon from "@/public/default_icon.png";
-import SkeletonUI from "../SkeletonUI";
 import NextImage from "next/image";
 import { convertToLocaleString } from "@/lib/convertDate";
 import Link from "next/link";
-import useSWR from "swr";
-import PostInteraction from "./PostInteraction";
+import { PostInteraction } from "./PostInteraction";
 import DdButton from "../DdButton";
 import Carousel from "./Carousel";
 import VidComponent from "./VidComponent";
 import { Post as PostType, User } from "@prisma/client";
+import Comment from "./Comment";
+import { getRtf } from "@/lib/helper";
 
 type FeedPostType = PostType & { author: User } & {
   likes: [{ userId: string }];
+} & {
+  _count: {
+    Comment: number;
+  };
 };
 
 function PostBody({ post }: { post: FeedPostType }) {
@@ -19,11 +23,11 @@ function PostBody({ post }: { post: FeedPostType }) {
     <>
       <div
         key={post.id}
-        className="mx-auto mt-6 w-[450px] overflow-hidden rounded border py-2 max-phones:w-full max-phones:rounded-none"
+        className="mx-auto mt-6 w-[480px] overflow-hidden rounded border py-2 max-phones:w-full max-phones:rounded-none"
       >
         <div className="flex items-center px-2">
           <Link
-            href={`/${post.authorId}`}
+            href={`/${post.author.username}`}
             className="size-8 cursor-pointer hover:opacity-85"
           >
             <NextImage
@@ -37,12 +41,12 @@ function PostBody({ post }: { post: FeedPostType }) {
           <div className="ml-2 flex flex-col">
             <Link
               className="cursor-pointer text-sm font-bold hover:underline"
-              href={`/${post.authorId}`}
+              href={`/${post.author.username}`}
             >
-              {post.authorId}
+              {post.author.username}
             </Link>
             <span className="text-xs text-muted-foreground">
-              {convertToLocaleString(post.createdAt as unknown as string)}
+              {getRtf(post.createdAt)}
             </span>
           </div>
           <div className="ml-auto cursor-pointer rounded-full p-1 hover:bg-gray-200">
@@ -59,7 +63,9 @@ function PostBody({ post }: { post: FeedPostType }) {
         <PostInteraction
           postId={post.id}
           likes={post.likes.map((like) => like.userId)}
+          comments={post._count.Comment}
         />
+        <Comment postId={post.id} />
       </div>
     </>
   );

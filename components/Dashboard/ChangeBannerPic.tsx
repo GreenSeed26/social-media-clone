@@ -13,7 +13,7 @@ import ReactCrop, {
 } from "react-image-crop";
 import NextImage from "next/image";
 import { ChangeEvent, SyntheticEvent, useRef, useState } from "react";
-import setCanvasPreview from "@/lib/setCanvasPreview";
+import { canvasPreview } from "@/lib/setCanvasPreview";
 import { ImageIcon } from "lucide-react";
 
 const MIN_DIM = 50;
@@ -82,7 +82,7 @@ function ChangeBannerPic({
       setError("Something went wrong. Please try cropping the image again.");
       return;
     }
-    setCanvasPreview(
+    canvasPreview(
       imgRef.current,
       prevCanvasRef.current,
       convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height)

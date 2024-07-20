@@ -1,31 +1,32 @@
-export async function getUser(username: string) {
-  try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user/${username}`, {
-      cache: "no-store",
-    });
+export function getRtf(date: Date | number, lang = "en") {
+  if (!date) return;
+  const timeMs = typeof date === "number" ? date : date.getTime();
+  const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);
+  const cutoffs = [
+    60,
+    3600,
+    86400,
+    86400 * 7,
+    86400 * 30,
+    86400 * 365,
+    Infinity,
+  ];
+  const units: Intl.RelativeTimeFormatUnit[] = [
+    "second",
+    "minute",
+    "hour",
+    "day",
+    "week",
+    "month",
+    "year",
+  ];
 
-    if (res.ok) {
-      const user = await res.json();
-      return user;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-  return null;
-}
-
-export async function getPosts() {
-  try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/posts`, {
-      cache: "no-store",
-    });
-
-    if (res.ok) {
-      const user = await res.json();
-      return user;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-  return null;
+  const unitIndex = cutoffs.findIndex(
+    (cutoff) => cutoff > Math.abs(deltaSeconds),
+  );
+  const divisor = unitIndex ? cutoffs[unitIndex - 1] : 1;
+  const rtf = new Intl.RelativeTimeFormat(lang, {
+    numeric: "auto",
+  });
+  return rtf.format(Math.floor(deltaSeconds / divisor), units[unitIndex]);
 }

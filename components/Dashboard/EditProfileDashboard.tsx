@@ -24,11 +24,11 @@ function EditProfileDashboard({ userData }: UserProps) {
   const [newBannerImage, setNewBannerImage] = useState<File>();
   const [newBio, setNewBio] = useState<string | null>(userData.bio);
   const [bioLen, setBioLen] = useState<number | null>(
-    userData.bio?.length || 0,
+    userData.bio?.length || 0
   );
   const [imgUrl, setImgUrl] = useState<string | null>(userData.image);
   const [bannerUrl, setBannerUrl] = useState<string | null>(
-    userData.bannerImage,
+    userData.bannerImage
   );
 
   const { data: session, update } = useSession();
@@ -95,6 +95,7 @@ function EditProfileDashboard({ userData }: UserProps) {
         ...session,
         user: {
           ...session?.user,
+          image,
           username,
         },
       });

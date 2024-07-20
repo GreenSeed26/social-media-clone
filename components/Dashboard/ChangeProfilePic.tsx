@@ -13,7 +13,7 @@ import ReactCrop, {
 } from "react-image-crop";
 import NextImage from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
-import setCanvasPreview from "@/lib/setCanvasPreview";
+import { canvasPreview } from "@/lib/setCanvasPreview";
 import { User } from "lucide-react";
 
 const MIN_DIM = 150;
@@ -71,7 +71,7 @@ function ChangeProfilePic({
       },
       ASPECT_RATIO,
       width,
-      height,
+      height
     );
     const centeredCrop = centerCrop(crop, width, height);
     setCrop(centeredCrop);
@@ -83,10 +83,10 @@ function ChangeProfilePic({
       return;
     }
 
-    setCanvasPreview(
+    canvasPreview(
       imgRef.current,
       prevCanvasRef.current,
-      convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height),
+      convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height)
     );
     prevCanvasRef.current.toBlob((blob) => {
       const file = new File([blob as Blob], "image", { type: blob?.type });
