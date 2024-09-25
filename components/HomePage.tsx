@@ -1,12 +1,9 @@
 "use client";
 import Image from "next/image";
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import { ImageIcon, VideoIcon } from "lucide-react";
 import defaultIcon from "@/public/default_icon.png";
-import NewPostForm from "./FeedComponents/NewPostForm";
 import { Post, User } from "@prisma/client";
-import SkeletonUI from "./SkeletonUI";
-import Posts from "./FeedComponents/Post";
 import CreatePost from "./FeedComponents/CreatePost";
 
 type HomeProps = {
@@ -17,7 +14,7 @@ function HomePage({ user }: HomeProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <div className="mx-auto w-[480px] flex-col justify-center border-x border-b p-2 max-phones:w-full">
+      <div className="mx-auto w-[520px] flex-col justify-center border-x border-t bg-white p-2 max-phones:w-full max-phones:rounded-none ">
         <div className="flex items-center">
           <Image
             src={user?.image || defaultIcon}

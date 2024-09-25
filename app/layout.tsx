@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "../components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
-import { EdgeStoreProvider } from "@/lib/edgestore";
-import { CustomProvider } from "rsuite";
 import NextAuthProvider from "../components/Provider";
+import ReactQueryProvider from "../components/RQProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,15 +24,8 @@ export default function RootLayout({
     <html className="" lang="en">
       <body className={`${inter.className} `}>
         <NextAuthProvider>
-          <EdgeStoreProvider>
-            <CustomProvider>
-              <main>
-                <Navbar />
-                {children}
-              </main>
-              <Toaster />
-            </CustomProvider>
-          </EdgeStoreProvider>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <Toaster />
         </NextAuthProvider>
       </body>
     </html>

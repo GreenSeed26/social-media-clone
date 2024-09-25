@@ -1,4 +1,4 @@
-export function getRtf(date: Date | number, lang = "en") {
+export function getRtf(date: Date | number | undefined, lang = "en") {
   if (!date) return;
   const timeMs = typeof date === "number" ? date : date.getTime();
   const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);

@@ -1,6 +1,7 @@
 "use client";
 import { ImageIcon, VideoIcon } from "lucide-react";
 import { ChangeEvent, useState } from "react";
+import { useToast } from "../ui/use-toast";
 
 export function VideoInput({
   getVideo,
@@ -40,9 +41,19 @@ export function ImageInput({
 }: {
   getImage: (data: string[], file: File[]) => void;
 }) {
+  const { toast } = useToast();
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+
     if (files) {
+      if (files.length > 4) {
+        toast({
+          title: "Error",
+          description: "Maximum of 4 Images can only be accepted!",
+          variant: "destructive",
+        });
+        return;
+      }
       const imageFile = Array.from(files);
       const imgPrev = imageFile.map((file) => URL.createObjectURL(file));
       const img = new Image();

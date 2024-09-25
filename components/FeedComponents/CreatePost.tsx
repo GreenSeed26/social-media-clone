@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { X } from "lucide-react";
-import CreatePostForm from "./CreatePostForm";
+import ExpCreatePost from "../Experimental/CreatePost";
 
 const CreatePost = ({
   username,
@@ -46,7 +46,7 @@ const CreatePost = ({
           <DialogTitle>Create Post</DialogTitle>
           <DialogDescription>{username}</DialogDescription>
         </DialogHeader>
-        <CreatePostForm setOpen={setOpen} />
+        <ExpCreatePost setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   );

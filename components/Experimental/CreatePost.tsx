@@ -1,27 +1,32 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { ImageInput, VideoInput } from "./VideoAndImage";
-import { createPost } from "@/lib/actions";
+import { useEffect, useRef, useState } from "react";
 import { PostButton } from "../FormButton";
-import { ImagePlus, X } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createPost } from "@/lib/actions";
+import Image from "next/image";
 import { useEdgeStore } from "@/lib/edgestore";
 import { useToast } from "../ui/use-toast";
-import Carousel from "./Carousel";
+import Carousel from "../FeedComponents/Carousel";
+import { X } from "lucide-react";
+import { ImageInput, VideoInput } from "../FeedComponents/VideoAndImage";
+import { PostVar } from "@/app/types";
 
-export default function CreatePostForm({
+function CreatePost({
   setOpen,
 }: {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
-  const vidRef = React.useRef<HTMLVideoElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const vidRef = useRef<HTMLVideoElement>(null);
   const [imgPrev, setImgPrev] = useState<string[]>([]);
   const [imgFile, setImgFile] = useState<File[]>([]);
   const [vidPrev, setVidPrev] = useState<string>("");
   const [vidFile, setVidFile] = useState<File | undefined>();
   const { edgestore: es } = useEdgeStore();
   const { toast } = useToast();
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const handleInput = () => {
@@ -56,10 +61,27 @@ export default function CreatePostForm({
     setVidPrev(data);
     setVidFile(file);
   };
+  const { mutateAsync: addPost } = useMutation({
+    mutationFn: (variables: PostVar) => createPost(variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    mutationKey: ["posts"],
+  });
 
-  const handleMediaUpload = async (formData: FormData) => {
+  const handleUpload = async (fd: FormData) => {
+    const postBody = fd.get("postBody") as string;
     let vidUrl = "";
     let imgUrl: string[] = [];
+
+    for (let i = 0; i < imgFile.length; i++) {
+      const res = await es.myPublicImages.upload({
+        file: imgFile[i],
+        options: { temporary: true },
+      });
+      imgUrl.push(res.url);
+    }
+
     if (vidFile) {
       const res = await es.myPublicFiles.upload({
         file: vidFile,
@@ -68,28 +90,23 @@ export default function CreatePostForm({
 
       vidUrl = res.url;
     }
-
-    // if (imgUrl.length > 0) {
-    for (let i = 0; i < imgFile.length; i++) {
-      const res = await es.myPublicImages.upload({
-        file: imgFile[i],
-        options: { temporary: true },
-      });
-      imgUrl.push(res.url);
-    }
-    // }
-
-    const postContent = formData.get("postBody") as string;
-    if (!postContent && !vidUrl && imgUrl.length === 0) {
+    if (postBody.trim() == "" && !vidUrl && !imgUrl) {
       setOpen(false);
       return;
     }
     try {
-      await createPost({ postBody: postContent, imgUrl, vidUrl });
-      toast({
-        title: "Upload Finished",
-        description: "Post created successfully",
-      });
+      await addPost(
+        { postBody, imgUrl, vidUrl },
+        {
+          onSuccess(data, variables, context) {
+            console.log(variables);
+          },
+          onError() {
+            return;
+          },
+        },
+      );
+      formRef.current?.reset();
       setOpen(false);
       if (imgUrl.length > 0) {
         for (let i = 0; i < imgUrl.length; i++) {
@@ -104,16 +121,12 @@ export default function CreatePostForm({
     }
   };
 
-  const handleDelete = (index: number) => {
-    setImgPrev((prev) => prev.filter((_, i) => i !== index));
-  };
-
   return (
-    <form action={handleMediaUpload} className="flex flex-col">
+    <form ref={formRef} action={handleUpload} className="flex flex-col">
       <div className="textarea-scroll max-h-96 w-full overflow-hidden overflow-y-scroll">
         <textarea
           ref={textAreaRef}
-          className="h-auto w-full resize-none whitespace-pre-wrap text-sm outline-none"
+          className="h-auto  w-full resize-none whitespace-pre-wrap text-sm outline-none"
           name="postBody"
           placeholder={`What's on your mind, ${"placeholder"}?`}
         ></textarea>
@@ -167,3 +180,5 @@ export default function CreatePostForm({
     </form>
   );
 }
+
+export default CreatePost;

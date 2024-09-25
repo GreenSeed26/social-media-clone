@@ -1,15 +1,35 @@
 "use server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./auth";
 import prisma from "./db";
 import { hash } from "bcrypt";
 import { redirect } from "next/navigation";
-import { revalidatePath, revalidateTag } from "next/cache";
-import { connect } from "http2";
+import { revalidatePath } from "next/cache";
+import { serverSession } from "./session";
+
+export const fetchPosts = async () => {
+  const posts = await prisma.post.findMany({
+    include: {
+      author: true,
+      likes: {
+        select: {
+          userId: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+
+  return posts;
+};
 
 export const switchLike = async (postId: string) => {
-  const session = await getServerSession(authOptions);
-  const userId = session?.user.id as string;
+  const { id: userId } = await serverSession();
 
   if (!userId) throw new Error("User not found");
 
@@ -70,27 +90,80 @@ export const registerUser = async (formData: FormData) => {
   redirect("/login");
 };
 
-export const createPost = async (
-  postBody?: string,
-  vidUrl?: string,
-  imgUrl?: string[],
-) => {
-  const session = await getServerSession(authOptions);
+export const findUser = async (username: string) => {
+  const user = await prisma.user.findFirst({
+    where: { username },
+  });
 
-  const userId = session?.user.id as string;
+  return user;
+};
+
+export const createPost = async (post: {
+  postBody?: string;
+  imgUrl?: string[];
+  vidUrl?: string;
+}) => {
+  const { id } = await serverSession();
   try {
     await prisma.post.create({
       data: {
-        author: { connect: { id: userId } },
-        postBody,
-        postVideo: vidUrl,
-        postImage: imgUrl,
+        author: { connect: { id } },
+        postBody: post.postBody,
+        postVideo: post.vidUrl,
+        postImage: post.imgUrl,
       },
     });
   } catch (error) {
     console.log(error);
   }
-  revalidatePath("/");
+};
+
+//Mutation
+
+export const getPost = async (postId: string) => {
+  const { id } = await serverSession();
+
+  if (!id) return null;
+
+  let post: any = await prisma.post.findUnique({
+    where: {
+      id: postId,
+    },
+    include: {
+      author: true,
+      likes: {
+        select: {
+          userId: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
+    },
+  });
+
+  return post;
+};
+
+export const editPost = async (post: { postId: string; postBody: string }) => {
+  const { id } = await serverSession();
+
+  if (!id) return null;
+
+  try {
+    await prisma.post.update({
+      where: {
+        id: post.postId,
+      },
+      data: {
+        postBody: post.postBody,
+      },
+    });
+  } catch (error) {
+    throw new Error("An unexpected error occured");
+  }
 };
 
 export const updateProfile = async (
@@ -100,12 +173,11 @@ export const updateProfile = async (
   image?: string,
   bannerImage?: string,
 ) => {
-  const session = await getServerSession(authOptions);
-  const userId = session?.user.id as string;
+  const { id } = await serverSession();
   try {
     await prisma.user.update({
       where: {
-        id: userId,
+        id,
       },
       data: {
         username,
@@ -127,15 +199,14 @@ export const sharePosts = async (postId: string, desc: string) => {
 };
 
 export const addComment = async (postId: string, desc: string) => {
-  const session = await getServerSession(authOptions);
-  const userId = session?.user.id;
-  if (!userId) throw new Error("User is not authenticated!");
+  const { id } = await serverSession();
+  if (!id) throw new Error("User is not authenticated!");
 
   try {
     const createdComment = await prisma.comment.create({
       data: {
         desc,
-        userId,
+        userId: id,
         postId,
       },
       include: {

@@ -18,14 +18,15 @@ function DisplayProfile({ user }: { user: User | null }) {
   const { data: session, status } = useSession();
 
   if (!session) {
-    redirect("/login");
+    redirect("/login"); 
+    
   }
 
   return (
     <>
       <Modal pfp={user?.image || ""} open={open} close={setOpen} />
       <section className="flex flex-col items-center">
-        <div className="font-inter w-full border">
+        <div className="font-inter w-full border bg-white">
           <div>
             <Image
               className="aspect-[4/2] h-auto w-full object-cover object-top"

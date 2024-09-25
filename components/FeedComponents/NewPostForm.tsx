@@ -85,8 +85,8 @@ function NewPostForm({ user }: { user: User | null }) {
         imgUrl.push(res.url);
       }
 
-      // Create the post with the content and image URL
-      await createPost(content, vidUrl, imgUrl);
+      // Create the post with the content and image URLn
+      // await createPost(content, vidUrl, imgUrl);
       console.log("success");
 
       // Reset form and state

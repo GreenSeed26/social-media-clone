@@ -117,7 +117,7 @@ function EditProfileDashboard({ userData }: UserProps) {
     <section className="flex justify-center">
       <form
         action={handleSubmit}
-        className="flex w-[600px] flex-col gap-2 border-x border-b"
+        className="flex w-full flex-col gap-2 border-x border-b"
       >
         <div className="relative">
           <Image

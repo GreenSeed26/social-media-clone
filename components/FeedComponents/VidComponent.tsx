@@ -19,6 +19,7 @@ function VidComponent({ video }: { video: string | null }) {
             width={1200}
             ref={vidRef}
             muted={mute}
+            loop
             onTimeUpdate={(e) => {
               const curr =
                 (e.currentTarget.currentTime / e.currentTarget.duration) * 100;
@@ -33,6 +34,7 @@ function VidComponent({ video }: { video: string | null }) {
           <div className="absolute bottom-0 flex h-8 w-full translate-y-8 items-center gap-2 rounded-b bg-gradient-to-t from-black to-white/0 px-2 transition-all group-hover:translate-y-0">
             <button
               onClick={(e) => {
+                e.stopPropagation();
                 if (vidRef.current?.paused) {
                   setIsplaying(true);
                   vidRef.current?.play();
@@ -49,7 +51,8 @@ function VidComponent({ video }: { video: string | null }) {
               )}
             </button>
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setMute((curr) => !curr);
               }}
             >
