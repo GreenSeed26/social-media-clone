@@ -69,11 +69,7 @@ function Experiment() {
                 </div>
                 <span className="text-sm">{post.postBody}</span>
                 <VidComponent video={post.postVideo} />
-                <Carousel
-                  postId={post.id}
-                  author={post.author.username}
-                  images={post.postImage}
-                />
+                <Carousel images={post.postImage} />
                 <div className="flex items-center justify-between">
                   <Like
                     postId={post.id}
