@@ -46,14 +46,14 @@ export function ImageInput({
     const files = e.target.files;
 
     if (files) {
-      if (files.length > 4) {
-        toast({
-          title: "Error",
-          description: "Maximum of 4 Images can only be accepted!",
-          variant: "destructive",
-        });
-        return;
-      }
+      // if (files.length > 4) {
+      //   toast({
+      //     title: "Error",
+      //     description: "Maximum of 4 Images can only be accepted!",
+      //     variant: "destructive",
+      //   });
+      //   return;
+      // }
       const imageFile = Array.from(files);
       const imgPrev = imageFile.map((file) => URL.createObjectURL(file));
       const img = new Image();

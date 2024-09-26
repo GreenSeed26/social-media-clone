@@ -1,44 +1,26 @@
 "use client";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-function Carousel({
-  images,
-  postId,
-  author,
-}: {
-  images: string[];
-  postId?: string;
-  author?: string;
-}) {
-  const router = useRouter();
-  const [curr, setCurr] = useState<number>(0);
-
-  const prev = () =>
-    setCurr((index) => {
-      if (index === 0) return images.length - 1;
-      return index - 1;
-    });
-
-  const next = () =>
-    setCurr((index) => {
-      if (index === images.length - 1) return 0;
-      return index + 1;
-    });
-
+function Carousel({ images }: { images: string[] }) {
   const imgBox = "border border-white object-cover overflow-hidden";
+
   return (
     <>
       {images.length > 1 && (
         <div className="grid auto-rows-[200px] grid-cols-2 rounded-lg">
-          {images.map((img, i) => (
+          {images.slice(0, 4).map((img, i) => (
             <div
               key={i}
-              className={`${imgBox} ${images.length == 3 && i == 2 - 1 ? "row-span-2 " : ""}`}
+              className={`${imgBox} relative ${images.length == 3 && i == 2 - 1 ? "row-span-2 " : ""}`}
             >
+              {i === 3 && images.length > 4 && (
+                <div className="absolute flex h-full w-full items-center justify-center bg-black/50">
+                  <span className="text-3xl text-white">
+                    + {images.length - 4}
+                  </span>
+                </div>
+              )}
+
               <Image
                 src={img}
                 alt={images.length.toLocaleString()}
