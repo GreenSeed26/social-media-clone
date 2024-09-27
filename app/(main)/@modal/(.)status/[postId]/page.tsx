@@ -2,21 +2,22 @@
 import { useGetPost } from "@/app/reactQueryHooks/useGetPost";
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Carousel from "@/components/Experimental/Carousel";
 import Link from "next/link";
 import Image from "next/image";
 import defaultIcon from "@/public/default_icon.png";
 import { getRtf } from "@/lib/helper";
 import { LucideMoreHorizontal } from "lucide-react";
+import Carousel from "./Carousel";
 
 function Status({ params }: { params: { postId: string } }) {
   const { data: post, isLoading } = useGetPost(params.postId);
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
+
   useEffect(() => {
     dialogRef.current?.showModal();
     document.body.style.overflow = "hidden";
-  });
+  }, []);
   const close = () => {
     router.back();
     document.body.style.overflow = "auto";

@@ -33,10 +33,10 @@ function Experiment() {
       {query.data?.map((post) => (
         <React.Fragment key={post.id}>
           <article className="mx-auto flex w-full max-w-[520px] cursor-pointer flex-col gap-1 overflow-hidden border-x border-t bg-white px-4 py-2  transition-colors hover:bg-gray-50 max-phones:w-full max-phones:rounded-none">
-            <div
-              onClick={() => {
-                router.push(`status/${post.id}`, { scroll: false });
-              }}
+            <Link
+              href={`status/${post.id}`}
+              scroll={false}
+              shallow={true}
               className="flex gap-1"
             >
               <div>
@@ -82,7 +82,7 @@ function Experiment() {
                   <Bookmark size={15} />
                 </div>
               </div>
-            </div>
+            </Link>
           </article>
           {/* <CommentList /> */}
         </React.Fragment>

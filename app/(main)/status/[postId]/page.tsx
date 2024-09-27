@@ -6,15 +6,13 @@ import { getRtf } from "@/lib/helper";
 import Carousel from "@/components/Experimental/Carousel";
 import Image from "next/image";
 import { LucideMoreHorizontal } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 function Status({ params }: { params: { postId: string } }) {
   const { data: post, isLoading } = useGetPost(params.postId);
 
   if (isLoading) return <h1>Loading</h1>;
   return (
     <div
-      onClick={(e) => e.stopPropagation()}
       className="min-h-[530px] max-w-4xl md:flex"
     >
       <div className="w-2/5">
